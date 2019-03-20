@@ -70,11 +70,23 @@
           </a>
         </v-layout>
       </v-flex>
+
+      <v-flex>
+        <v-btn color="info" @click="loginBtn">
+          {{ loginBtnText }}
+        </v-btn>
+        <p>
+          {{ loginText }}
+        </p>
+        <v-btn color="success" to="Applicant">Success</v-btn>
+      </v-flex>
     </v-layout>
   </v-container>
 </template>
 
 <script>
+import { signIn, signOut } from "./../core/auth";
+import firebase from "./../core/firebase";
 export default {
   data: () => ({
     ecosystem: [
@@ -126,8 +138,37 @@ export default {
         text: "Frequently Asked Questions",
         href: "https://vuetifyjs.com/getting-started/frequently-asked-questions"
       }
-    ]
-  })
+    ],
+    loginBtnText: "Login",
+    loginText: "",
+    isLogin: false
+  }),
+  mounted() {
+    firebase.auth().onAuthStateChanged(user => {
+      this.isLogin = !!user;
+      this.changeText();
+    });
+  },
+  methods: {
+    loginBtn: function() {
+      if (this.isLogin) {
+        signOut();
+      } else {
+        signIn();
+      }
+    },
+    changeText: function() {
+      if (this.isLogin) {
+        this.loginBtnText = "ออกจากระบบ";
+        this.loginText =
+          "ลงชื่อเข้าใช้ด้วยชื่อ " +
+          firebase.auth().currentUser.providerData[0].displayName;
+      } else {
+        this.loginBtnText = "ลงชื่อเข้าใช้";
+        this.loginText = "";
+      }
+    }
+  }
 };
 </script>
 
