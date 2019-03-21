@@ -4,7 +4,6 @@
       <v-flex xs12>
         <ImgUp
           v-model="form.pic"
-          :disabled="disable"
           readonly
           text="อัปโหลดรูปที่เห็นหน้าน้องๆชัดเจน"
           filename="pic_profile"

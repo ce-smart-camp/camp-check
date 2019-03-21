@@ -2,10 +2,7 @@
   <div class="text-xs-center">
     <v-img :src="imageUrl" max-height="300" contain />
 
-    <v-alert
-      :value="readonly && (imageUrl === '' || imgMD5 === '')"
-      type="warning"
-    >
+    <v-alert :value="imageUrl === '' || imgMD5 === ''" type="warning">
       น้องๆไม่ได้อัปโหลดรูปภาพ
     </v-alert>
   </div>
@@ -19,18 +16,6 @@ export default {
     value: {
       type: String,
       default: ""
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    readonly: {
-      type: Boolean,
-      default: false
-    },
-    text: {
-      type: String,
-      default: "อัปโหลด"
     },
     filename: {
       type: String,
