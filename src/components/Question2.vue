@@ -7,7 +7,6 @@
         :pagination.sync="pagination"
         :total-items="totalApplicants"
         :loading="loading"
-        :rows-per-page-items="rowsPerPageItems"
         class="elevation-1"
       >
         <template v-slot:items="props">
@@ -49,12 +48,6 @@ export default {
       applicants: [],
       loading: true,
       pagination: {},
-      rowsPerPageItems: [
-        50,
-        100,
-        250,
-        { text: "$vuetify.dataIterator.rowsPerPageAll", value: -1 }
-      ],
       headers: [
         {
           text: "ID",
@@ -99,7 +92,7 @@ export default {
       return new Promise((resolve, reject) => {
         let { sortBy, descending, page, rowsPerPage } = this.pagination;
 
-        let ref = db.collection("reg");
+        let ref = db.collection("qus");
 
         if (sortBy !== null)
           ref = ref.orderBy(sortBy, descending ? "desc" : "asc");

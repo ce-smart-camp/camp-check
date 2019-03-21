@@ -7,19 +7,15 @@
         :pagination.sync="pagination"
         :total-items="totalApplicants"
         :loading="loading"
-        :rows-per-page-items="rowsPerPageItems"
         class="elevation-1"
       >
         <template v-slot:items="props">
           <td>{{ props.item.id }}</td>
-          <td class="text-xs-right">{{ props.item.info.name }}</td>
-          <td class="text-xs-right">{{ props.item.info.surname }}</td>
-          <td class="text-xs-right">{{ props.item.info.gender }}</td>
           <td class="text-xs-right">
             {{
               new Date(
-                props.item.created_at.seconds * 1000 +
-                  props.item.created_at.nanoseconds / 1000000
+                props.item.update_at.seconds * 1000 +
+                  props.item.update_at.nanoseconds / 1000000
               ).toString()
             }}
           </td>
@@ -49,12 +45,6 @@ export default {
       applicants: [],
       loading: true,
       pagination: {},
-      rowsPerPageItems: [
-        50,
-        100,
-        250,
-        { text: "$vuetify.dataIterator.rowsPerPageAll", value: -1 }
-      ],
       headers: [
         {
           text: "ID",
@@ -62,10 +52,7 @@ export default {
           sortable: false,
           value: "id"
         },
-        { text: "Name", value: "info.name", sortable: false },
-        { text: "Surname", value: "info.surname", sortable: false },
-        { text: "Gender", value: "info.gender", sortable: false },
-        { text: "created_at", value: "created_at" },
+        { text: "created_at", value: "update_at" },
         { text: "Actions", value: "name", sortable: false }
       ],
       past: {
@@ -99,7 +86,7 @@ export default {
       return new Promise((resolve, reject) => {
         let { sortBy, descending, page, rowsPerPage } = this.pagination;
 
-        let ref = db.collection("reg");
+        let ref = db.collection("qus");
 
         if (sortBy !== null)
           ref = ref.orderBy(sortBy, descending ? "desc" : "asc");
