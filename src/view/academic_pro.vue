@@ -13,8 +13,7 @@
       rows="8"
       box
       single-line
-      :readonly="readonly"
-      :disabled="disable && !readonly"
+      readonly
     />
     <div class="my-3">
       <p>
@@ -23,11 +22,6 @@
         และแสดงผลลัพธ์ที่ได้ออกมาจากการทำงานของโปรแกรม<br />
         <i>(เขียนบรรทัดที่ผิด+จุดที่ผิด พร้อมแก้ไขให้ถูกต้อง)</i>
       </p>
-      <v-img
-        :src="require('../assets/question/q-3-2.webp')"
-        contain
-        max-height="450px"
-      ></v-img>
     </div>
     <v-textarea
       v-model="form.item2"
@@ -35,8 +29,7 @@
       rows="8"
       box
       single-line
-      :readonly="readonly"
-      :disabled="disable && !readonly"
+      readonly
     />
     <div class="my-3">
       <p>
@@ -46,20 +39,8 @@
         โดยต้องมีสัญลักษณ์ที่พี่ๆกำหนดให้ด้านล่างนี้เป็นส่วนประกอบ<br />
         <i>(Hint : ขั้นตอนดำเนินการอยู่ในเว็บไซต์สมัคร)</i>
       </p>
-      <v-img
-        :src="require('../assets/question/q-3-3.webp')"
-        contain
-        max-height="75px"
-      ></v-img>
     </div>
-    <ImgUp
-      v-model="form.item3"
-      :disabled="disable"
-      :readonly="readonly"
-      text="อัปโหลดรูปของคำตอบ"
-      filename="q-3-3"
-      class="pb-4"
-    />
+    <ImgUp v-model="form.item3" filename="q-3-3" class="pb-4" />
   </v-card-text>
 </template>
 
@@ -71,49 +52,16 @@ export default {
     ImgUp
   },
   props: {
-    value: {
+    form: {
       type: Object,
       default: function() {
-        return {};
+        return {
+          item1: null,
+          item2: null,
+          item3: ""
+        };
       }
-    },
-    readonly: {
-      type: Boolean,
-      default: false
-    },
-    disable: {
-      type: Boolean,
-      default: false
     }
-  },
-  data: () => ({
-    form: {
-      item1: null,
-      item2: null,
-      item3: ""
-    }
-  }),
-  watch: {
-    form: {
-      handler(val) {
-        this.$emit("input", val);
-      },
-      deep: true
-    },
-    value: {
-      handler(val) {
-        this.form = val;
-      },
-      deep: true
-    }
-  },
-  mounted: function() {
-    if (this.value !== null) {
-      Object.keys(this.form).forEach(key => {
-        this.form[key] = this.value[key] || null;
-      });
-    }
-    this.$emit("input", this.form);
   }
 };
 </script>

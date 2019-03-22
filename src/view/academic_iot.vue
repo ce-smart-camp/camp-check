@@ -15,16 +15,14 @@
       rows="5"
       label="อธิบายรายละเอียดเกี่ยวกับโปรเจค"
       box
-      :readonly="readonly"
-      :disabled="disable && !readonly"
+      readonly
     />
     <v-textarea
       v-model="form.item2"
       rows="5"
       label="ทำไมน้องๆถึงเลือกทำโปรเจคนี้ขึ้นมา"
       box
-      :readonly="readonly"
-      :disabled="disable && !readonly"
+      readonly
     />
     <v-textarea
       v-model="form.item3"
@@ -39,16 +37,14 @@
       rows="5"
       label="โปรเจคที่คิดออกมาใครสามารถนำไปใช้ได้บ้าง อย่างไร"
       box
-      :readonly="readonly"
-      :disabled="disable && !readonly"
+      readonly
     />
     <v-textarea
       v-model="form.item5"
       rows="5"
       label="สามารถนำไปต่อยอดได้อย่าง"
       box
-      :readonly="readonly"
-      :disabled="disable && !readonly"
+      readonly
     />
 
     <div class="my-3">
@@ -62,8 +58,7 @@
       rows="8"
       box
       single-line
-      :readonly="readonly"
-      :disabled="disable && !readonly"
+      readonly
     />
   </v-card-text>
 </template>
@@ -71,52 +66,19 @@
 <script>
 export default {
   props: {
-    value: {
+    form: {
       type: Object,
       default: function() {
-        return {};
+        return {
+          item1: null,
+          item2: null,
+          item3: null,
+          item4: null,
+          item5: null,
+          item9: null
+        };
       }
-    },
-    readonly: {
-      type: Boolean,
-      default: false
-    },
-    disable: {
-      type: Boolean,
-      default: false
     }
-  },
-  data: () => ({
-    form: {
-      item1: null,
-      item2: null,
-      item3: null,
-      item4: null,
-      item5: null,
-      item9: null
-    }
-  }),
-  watch: {
-    form: {
-      handler(val) {
-        this.$emit("input", val);
-      },
-      deep: true
-    },
-    value: {
-      handler(val) {
-        this.form = val;
-      },
-      deep: true
-    }
-  },
-  mounted: function() {
-    if (this.value !== null) {
-      Object.keys(this.form).forEach(key => {
-        this.form[key] = this.value[key] || null;
-      });
-    }
-    this.$emit("input", this.form);
   }
 };
 </script>

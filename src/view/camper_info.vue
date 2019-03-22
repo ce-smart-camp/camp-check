@@ -2,7 +2,7 @@
   <v-card-text>
     <v-layout row wrap>
       <v-flex xs12>
-        <ImgUp v-model="form.pic" readonly filename="pic_profile" />
+        <ImgUp v-model="form.pic" filename="pic_profile" />
       </v-flex>
 
       <v-flex md3 sm4 xs12>

@@ -2,7 +2,7 @@
   <div class="text-xs-center">
     <v-img :src="imageUrl" max-height="500" contain />
 
-    <v-alert :value="value === ''" type="warning">
+    <v-alert :value="!value" type="warning">
       น้องๆไม่ได้อัปโหลดรูปภาพ
     </v-alert>
   </div>

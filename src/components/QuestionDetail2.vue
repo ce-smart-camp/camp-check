@@ -3,58 +3,22 @@
     <v-layout text-xs-center wrap>
       <v-flex xs12>
         <v-card>
-          <v-card-title primary-title>
-            <h4 class="display-1">ตรวจสอบข้อมูล</h4>
-          </v-card-title>
-          <CamperInfo v-model="reg.info" />
+          <AcademicLogic :form="qus.logic" />
         </v-card>
       </v-flex>
       <v-flex xs12>
         <v-card>
-          <v-card-title primary-title>
-            <h5 class="headline">การติดต่อ</h5>
-          </v-card-title>
-          <CamperContact v-model="reg.contact" />
+          <AcademicElect :form="qus.elect" />
         </v-card>
       </v-flex>
       <v-flex xs12>
         <v-card>
-          <v-card-title primary-title>
-            <h5 class="headline">ข้อมูลสุขภาพ</h5>
-          </v-card-title>
-          <CamperHealth v-model="reg.health" />
+          <AcademicPro :form="qus.pro" />
         </v-card>
       </v-flex>
       <v-flex xs12>
         <v-card>
-          <v-card-title primary-title>
-            <h5 class="headline">ที่อยู่</h5>
-          </v-card-title>
-          <CamperAddress v-model="reg.address" />
-        </v-card>
-      </v-flex>
-      <v-flex xs12>
-        <v-card>
-          <v-card-title primary-title>
-            <h5 class="headline">การศึกษา</h5>
-          </v-card-title>
-          <CamperEdu v-model="reg.edu" />
-        </v-card>
-      </v-flex>
-      <v-flex xs12>
-        <v-card>
-          <v-card-title primary-title>
-            <h5 class="headline">ผู้ปกครอง</h5>
-          </v-card-title>
-          <CamperParent v-model="reg.parent" />
-        </v-card>
-      </v-flex>
-      <v-flex xs12>
-        <v-card>
-          <v-card-title primary-title>
-            <h5 class="headline">ประวัติการเข้าค่าย</h5>
-          </v-card-title>
-          <CamperPass v-model="reg.pass" readonly />
+          <AcademicIOT :form="qus.iot" />
         </v-card>
       </v-flex>
     </v-layout>
@@ -62,26 +26,20 @@
 </template>
 
 <script>
-import CamperInfo from "./../view/camper_info";
-import CamperContact from "./../view/camper_contact";
-import CamperHealth from "./../view/camper_health";
-import CamperAddress from "./../view/camper_address";
-import CamperEdu from "./../view/camper_edu";
-import CamperParent from "./../view/camper_parent";
-import CamperPass from "./../view/camper_pass";
+import AcademicLogic from "./../view/academic_logic";
+import AcademicElect from "./../view/academic_elect";
+import AcademicPro from "./../view/academic_pro";
+import AcademicIOT from "./../view/academic_iot";
 
 export default {
   components: {
-    CamperInfo,
-    CamperContact,
-    CamperHealth,
-    CamperAddress,
-    CamperEdu,
-    CamperParent,
-    CamperPass
+    AcademicLogic,
+    AcademicElect,
+    AcademicPro,
+    AcademicIOT
   },
   computed: {
-    reg() {
+    qus() {
       return this.$store.state.list.qus[
         this.$store.state.key.qus[this.$route.params.id]
       ];
