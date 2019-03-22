@@ -7,8 +7,14 @@ import * as mutations from "./mutations";
 Vue.use(Vuex);
 
 const state = {
-  isLogin: true,
-  applicant: []
+  is: {
+    initAuth: null,
+    login: null,
+    setupDB: null
+  },
+  dbSnapshot: null,
+  applicant: [],
+  applicantKey: {}
 };
 
 const store = new Vuex.Store({

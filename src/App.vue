@@ -28,6 +28,9 @@ export default {
     return {
       //
     };
+  },
+  mounted: function() {
+    this.$store.dispatch("init");
   }
 };
 </script>

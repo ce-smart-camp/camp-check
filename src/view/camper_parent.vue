@@ -19,7 +19,12 @@
       </v-flex>
 
       <v-flex sm6 xs12>
-        <v-text-field v-model="form.tel" label="หมายเลขโทรศัพท์" readonly />
+        <v-text-field
+          v-model="form.tel"
+          label="หมายเลขโทรศัพท์"
+          mask="## #### ####"
+          readonly
+        />
       </v-flex>
     </v-layout>
   </v-card-text>

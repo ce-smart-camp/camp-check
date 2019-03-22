@@ -70,8 +70,6 @@ import CamperEdu from "./../view/camper_edu";
 import CamperParent from "./../view/camper_parent";
 import CamperPass from "./../view/camper_pass";
 
-import db from "./../core/db";
-
 export default {
   components: {
     CamperInfo,
@@ -82,36 +80,12 @@ export default {
     CamperParent,
     CamperPass
   },
-  data: () => ({
-    reg: {
-      fb_id: null,
-      info: null,
-      contact: null,
-      health: null,
-      address: null,
-      edu: null,
-      parent: null,
-      pass: null,
-      created_at: null,
-      update_at: null
+  computed: {
+    reg() {
+      return this.$store.state.applicant[
+        this.$store.state.applicantKey[this.$route.params.id]
+      ];
     }
-  }),
-  mounted: function() {
-    var docRef = db.collection("reg").doc(this.$route.params.id);
-
-    docRef
-      .get()
-      .then(doc => {
-        if (doc.exists) {
-          this.reg = doc.data();
-        } else {
-          // doc.data() will be undefined in this case
-          console.log("No such document!");
-        }
-      })
-      .catch(function(error) {
-        console.log("Error getting document:", error);
-      });
   }
 };
 </script>

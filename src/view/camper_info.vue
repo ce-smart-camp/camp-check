@@ -14,6 +14,7 @@
         <v-text-field
           v-model="form.nid"
           label="เลขประจำตัวประชาชนไทย"
+          mask="#-####-#####-##-#"
           readonly
         />
       </v-flex>

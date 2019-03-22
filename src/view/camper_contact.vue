@@ -2,7 +2,12 @@
   <v-card-text>
     <v-layout row wrap>
       <v-flex sm6>
-        <v-text-field v-model="form.phone" label="หมายเลขโทรศัพท์" readonly />
+        <v-text-field
+          v-model="form.phone"
+          label="หมายเลขโทรศัพท์"
+          mask="## #### ####"
+          readonly
+        />
       </v-flex>
 
       <v-flex sm6>

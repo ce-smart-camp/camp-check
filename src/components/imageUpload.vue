@@ -1,8 +1,8 @@
 <template>
   <div class="text-xs-center">
-    <v-img :src="imageUrl" max-height="300" contain />
+    <v-img :src="imageUrl" max-height="500" contain />
 
-    <v-alert :value="imageUrl === '' || imgMD5 === ''" type="warning">
+    <v-alert :value="imgMD5 === ''" type="warning">
       น้องๆไม่ได้อัปโหลดรูปภาพ
     </v-alert>
   </div>
