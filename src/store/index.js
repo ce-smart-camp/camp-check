@@ -12,6 +12,21 @@ const state = {
     login: null,
     setupDB: null
   },
+  snapshot: {
+    reg: null,
+    qus: null,
+    check: null
+  },
+  key: {
+    reg: {},
+    qus: {},
+    check: {}
+  },
+  list: {
+    reg: [],
+    qus: [],
+    check: []
+  },
   dbSnapshot: null,
   applicant: [],
   applicantKey: {}

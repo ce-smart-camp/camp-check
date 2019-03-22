@@ -2,11 +2,11 @@ import VueRouter from "vue-router";
 import goTo from "vuetify/lib/components/Vuetify/goTo";
 
 import HelloWorld from "./components/HelloWorld.vue";
+
 import Applicant from "./components/Applicant.vue";
 import ApplicantDetail from "./components/ApplicantDetail.vue";
 
-import Question1 from "./components/Question1.vue";
-import Question2 from "./components/Question2.vue";
+import Question from "./components/Question.vue";
 
 const router = new VueRouter({
   mode: "history",
@@ -30,8 +30,7 @@ const router = new VueRouter({
       name: "ApplicantDetail",
       component: ApplicantDetail
     },
-    { path: "/q1", component: Question1 },
-    { path: "/q2", component: Question2 }
+    { path: "/q", component: Question }
   ]
 });
 

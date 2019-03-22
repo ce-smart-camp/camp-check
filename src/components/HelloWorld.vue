@@ -79,8 +79,7 @@
           {{ loginText }}
         </p>
         <v-btn color="success" to="a">Applicant</v-btn>
-        <v-btn color="success" to="q1">Question1</v-btn>
-        <v-btn color="success" to="q2">Question2</v-btn>
+        <v-btn color="success" to="q">Question</v-btn>
       </v-flex>
     </v-layout>
   </v-container>

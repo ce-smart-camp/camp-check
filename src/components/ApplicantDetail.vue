@@ -82,8 +82,8 @@ export default {
   },
   computed: {
     reg() {
-      return this.$store.state.applicant[
-        this.$store.state.applicantKey[this.$route.params.id]
+      return this.$store.state.list.reg[
+        this.$store.state.key.reg[this.$route.params.id]
       ];
     }
   }

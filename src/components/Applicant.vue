@@ -74,7 +74,7 @@ export default {
   },
   computed: {
     campers() {
-      return this.$store.state.applicant;
+      return this.$store.state.list.reg;
     }
   }
 };
