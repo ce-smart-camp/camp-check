@@ -2,12 +2,7 @@
   <v-card-text>
     <v-layout row wrap>
       <v-flex xs12>
-        <ImgUp
-          v-model="form.pic"
-          readonly
-          text="อัปโหลดรูปที่เห็นหน้าน้องๆชัดเจน"
-          filename="pic_profile"
-        />
+        <ImgUp v-model="form.pic" readonly filename="pic_profile" />
       </v-flex>
 
       <v-flex md3 sm4 xs12>
@@ -110,10 +105,20 @@ export default {
     ImgUp
   },
   props: {
-    value: {
+    form: {
       type: Object,
       default: function() {
-        return {};
+        return {
+          pic: "",
+          nid: null,
+          name: null,
+          surname: null,
+          nickname: null,
+          gender: null,
+          birth: null,
+          religion: null,
+          shirt: null
+        };
       }
     }
   },
@@ -124,34 +129,7 @@ export default {
       shirtSize: shirtSizeOptions
     },
     date: null,
-    menu: false,
-    form: {
-      pic: "",
-      nid: null,
-      name: null,
-      surname: null,
-      nickname: null,
-      gender: null,
-      birth: null,
-      religion: null,
-      shirt: null
-    }
-  }),
-  watch: {
-    value: {
-      handler(val) {
-        this.form = val;
-      },
-      deep: true
-    }
-  },
-  mounted: function() {
-    if (this.value !== null) {
-      Object.keys(this.form).forEach(key => {
-        this.form[key] = this.value[key] || null;
-      });
-    }
-    this.$emit("input", this.form);
-  }
+    menu: false
+  })
 };
 </script>

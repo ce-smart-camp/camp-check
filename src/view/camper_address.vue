@@ -43,41 +43,22 @@
 <script>
 export default {
   props: {
-    value: {
+    form: {
       type: Object,
       default: function() {
-        return {};
+        return {
+          number: null,
+          moo: null,
+          alley: null,
+          village: null,
+          road: null,
+          subdistrict: null,
+          district: null,
+          province: null,
+          pcode: null
+        };
       }
     }
-  },
-  data: () => ({
-    form: {
-      number: null,
-      moo: null,
-      alley: null,
-      village: null,
-      road: null,
-      subdistrict: null,
-      district: null,
-      province: null,
-      pcode: null
-    }
-  }),
-  watch: {
-    value: {
-      handler(val) {
-        this.form = val;
-      },
-      deep: true
-    }
-  },
-  mounted: function() {
-    if (this.value !== null) {
-      Object.keys(this.form).forEach(key => {
-        this.form[key] = this.value[key] || null;
-      });
-    }
-    this.$emit("input", this.form);
   }
 };
 </script>

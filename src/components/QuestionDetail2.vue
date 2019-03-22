@@ -6,7 +6,7 @@
           <v-card-title primary-title>
             <h4 class="display-1">ตรวจสอบข้อมูล</h4>
           </v-card-title>
-          <CamperInfo :form="reg.info" />
+          <CamperInfo v-model="reg.info" />
         </v-card>
       </v-flex>
       <v-flex xs12>
@@ -14,7 +14,7 @@
           <v-card-title primary-title>
             <h5 class="headline">การติดต่อ</h5>
           </v-card-title>
-          <CamperContact :form="reg.contact" />
+          <CamperContact v-model="reg.contact" />
         </v-card>
       </v-flex>
       <v-flex xs12>
@@ -22,7 +22,7 @@
           <v-card-title primary-title>
             <h5 class="headline">ข้อมูลสุขภาพ</h5>
           </v-card-title>
-          <CamperHealth :form="reg.health" />
+          <CamperHealth v-model="reg.health" />
         </v-card>
       </v-flex>
       <v-flex xs12>
@@ -30,7 +30,7 @@
           <v-card-title primary-title>
             <h5 class="headline">ที่อยู่</h5>
           </v-card-title>
-          <CamperAddress :form="reg.address" />
+          <CamperAddress v-model="reg.address" />
         </v-card>
       </v-flex>
       <v-flex xs12>
@@ -38,7 +38,7 @@
           <v-card-title primary-title>
             <h5 class="headline">การศึกษา</h5>
           </v-card-title>
-          <CamperEdu :form="reg.edu" />
+          <CamperEdu v-model="reg.edu" />
         </v-card>
       </v-flex>
       <v-flex xs12>
@@ -46,7 +46,7 @@
           <v-card-title primary-title>
             <h5 class="headline">ผู้ปกครอง</h5>
           </v-card-title>
-          <CamperParent :form="reg.parent" />
+          <CamperParent v-model="reg.parent" />
         </v-card>
       </v-flex>
       <v-flex xs12>
@@ -54,7 +54,7 @@
           <v-card-title primary-title>
             <h5 class="headline">ประวัติการเข้าค่าย</h5>
           </v-card-title>
-          <CamperPass :form="reg.pass" readonly />
+          <CamperPass v-model="reg.pass" readonly />
         </v-card>
       </v-flex>
     </v-layout>
@@ -82,8 +82,8 @@ export default {
   },
   computed: {
     reg() {
-      return this.$store.state.list.reg[
-        this.$store.state.key.reg[this.$route.params.id]
+      return this.$store.state.list.qus[
+        this.$store.state.key.qus[this.$route.params.id]
       ];
     }
   }

@@ -53,39 +53,20 @@
 <script>
 export default {
   props: {
-    value: {
+    form: {
       type: Object,
       default: function() {
-        return {};
+        return {
+          camp1: null,
+          camp1_uni: null,
+          camp2: null,
+          camp2_uni: null,
+          camp3: null,
+          camp3_uni: null,
+          knowFrom: null
+        };
       }
     }
-  },
-  data: () => ({
-    form: {
-      camp1: null,
-      camp1_uni: null,
-      camp2: null,
-      camp2_uni: null,
-      camp3: null,
-      camp3_uni: null,
-      knowFrom: null
-    }
-  }),
-  watch: {
-    value: {
-      handler(val) {
-        this.form = val;
-      },
-      deep: true
-    }
-  },
-  mounted: function() {
-    if (this.value !== null) {
-      Object.keys(this.form).forEach(key => {
-        this.form[key] = this.value[key] || null;
-      });
-    }
-    this.$emit("input", this.form);
   }
 };
 </script>

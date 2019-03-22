@@ -42,37 +42,18 @@
 <script>
 export default {
   props: {
-    value: {
+    form: {
       type: Object,
       default: function() {
-        return {};
+        return {
+          phone: null,
+          email: null,
+          fb: null,
+          line: null,
+          talent: null
+        };
       }
     }
-  },
-  data: () => ({
-    form: {
-      phone: null,
-      email: null,
-      fb: null,
-      line: null,
-      talent: null
-    }
-  }),
-  watch: {
-    value: {
-      handler(val) {
-        this.form = val;
-      },
-      deep: true
-    }
-  },
-  mounted: function() {
-    if (this.value !== null) {
-      Object.keys(this.form).forEach(key => {
-        this.form[key] = this.value[key] || null;
-      });
-    }
-    this.$emit("input", this.form);
   }
 };
 </script>

@@ -7,6 +7,7 @@ import Applicant from "./components/Applicant.vue";
 import ApplicantDetail from "./components/ApplicantDetail.vue";
 
 import Question from "./components/Question.vue";
+import QuestionDetail1 from "./components/QuestionDetail1";
 
 const router = new VueRouter({
   mode: "history",
@@ -27,10 +28,15 @@ const router = new VueRouter({
     { path: "/a", component: Applicant },
     {
       path: "/a/:id",
-      name: "ApplicantDetail",
+      name: "aid",
       component: ApplicantDetail
     },
-    { path: "/q", component: Question }
+    { path: "/q", component: Question },
+    {
+      path: "/q1/:id",
+      name: "qid1",
+      component: QuestionDetail1
+    }
   ]
 });
 

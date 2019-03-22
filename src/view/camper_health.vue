@@ -27,35 +27,16 @@
 <script>
 export default {
   props: {
-    value: {
+    form: {
       type: Object,
       default: function() {
-        return {};
+        return {
+          disease: null,
+          drug: null,
+          food: null
+        };
       }
     }
-  },
-  data: () => ({
-    form: {
-      disease: null,
-      drug: null,
-      food: null
-    }
-  }),
-  watch: {
-    value: {
-      handler(val) {
-        this.form = val;
-      },
-      deep: true
-    }
-  },
-  mounted: function() {
-    if (this.value !== null) {
-      Object.keys(this.form).forEach(key => {
-        this.form[key] = this.value[key] || null;
-      });
-    }
-    this.$emit("input", this.form);
   }
 };
 </script>

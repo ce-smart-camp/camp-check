@@ -2,7 +2,7 @@
   <div class="text-xs-center">
     <v-img :src="imageUrl" max-height="500" contain />
 
-    <v-alert :value="imgMD5 === ''" type="warning">
+    <v-alert :value="value === ''" type="warning">
       น้องๆไม่ได้อัปโหลดรูปภาพ
     </v-alert>
   </div>
@@ -24,14 +24,10 @@ export default {
   },
   data: () => ({
     imageUrl: "",
-    fileRef: null,
-    imgMD5: ""
+    fileRef: null
   }),
-  watch: {
-    value(val) {
-      this.imgMD5 = val;
-      if (val !== "") this.loadImg();
-    }
+  mounted() {
+    if (this.value !== "") this.loadImg();
   },
   methods: {
     loadImg() {

@@ -46,48 +46,33 @@ const gradesOptions = Options(grades);
 
 export default {
   props: {
-    value: {
+    form: {
       type: Object,
       default: function() {
-        return {};
+        return {
+          school: null,
+          province: null,
+          class: null,
+          plan: null,
+          gpax: null
+        };
       }
     }
   },
   data: () => ({
-    gradesOptions,
-    classRaw: null,
-    form: {
-      school: null,
-      province: null,
-      class: null,
-      plan: null,
-      gpax: null
-    }
+    gradesOptions
   }),
-  watch: {
-    value: {
-      handler(val) {
-        this.form = val;
-      },
-      deep: true
-    },
-    "form.class"(val) {
-      if (typeof grades[val] !== "undefined") {
-        if (this.classRaw === null) this.classRaw = {};
-        this.classRaw.value = val;
-        this.classRaw.text = grades[val];
+  computed: {
+    classRaw() {
+      if (typeof grades[this.form.class] !== "undefined") {
+        return {
+          value: this.form.class,
+          text: grades[this.form.class]
+        };
       } else {
-        if (val != this.classRaw) this.classRaw = val;
+        return this.form.class;
       }
     }
-  },
-  mounted: function() {
-    if (this.value !== null) {
-      Object.keys(this.form).forEach(key => {
-        this.form[key] = this.value[key] || null;
-      });
-    }
-    this.$emit("input", this.form);
   }
 };
 </script>

@@ -13,8 +13,7 @@
       rows="8"
       box
       single-line
-      :readonly="readonly"
-      :disabled="disable && !readonly"
+      readonly
     />
     <div class="my-3">
       <p>
@@ -27,8 +26,7 @@
       rows="8"
       box
       single-line
-      :readonly="readonly"
-      :disabled="disable && !readonly"
+      readonly
     />
     <div class="my-3">
       <p>
@@ -47,8 +45,7 @@
       rows="8"
       box
       single-line
-      :readonly="readonly"
-      :disabled="disable && !readonly"
+      readonly
     />
   </v-card-text>
 </template>
@@ -56,49 +53,16 @@
 <script>
 export default {
   props: {
-    value: {
+    form: {
       type: Object,
       default: function() {
-        return {};
+        return {
+          item1: null,
+          item2: null,
+          item3: null
+        };
       }
-    },
-    readonly: {
-      type: Boolean,
-      default: false
-    },
-    disable: {
-      type: Boolean,
-      default: false
     }
-  },
-  data: () => ({
-    form: {
-      item1: null,
-      item2: null,
-      item3: null
-    }
-  }),
-  watch: {
-    form: {
-      handler(val) {
-        this.$emit("input", val);
-      },
-      deep: true
-    },
-    value: {
-      handler(val) {
-        this.form = val;
-      },
-      deep: true
-    }
-  },
-  mounted: function() {
-    if (this.value !== null) {
-      Object.keys(this.form).forEach(key => {
-        this.form[key] = this.value[key] || null;
-      });
-    }
-    this.$emit("input", this.form);
   }
 };
 </script>

@@ -35,7 +35,7 @@
                 flat
                 icon
                 color="indigo"
-                :to="{ name: 'ApplicantDetail', params: { id: props.item.id } }"
+                :to="{ name: 'aid', params: { id: props.item.id } }"
               >
                 <v-icon small class="mr-2 pl-2">insert_comment</v-icon>
               </v-btn>
