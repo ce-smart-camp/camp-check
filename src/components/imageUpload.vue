@@ -27,7 +27,7 @@ export default {
     fileRef: null
   }),
   mounted() {
-    if (this.value !== "") this.loadImg();
+    if (this.value) this.loadImg();
   },
   methods: {
     loadImg() {
