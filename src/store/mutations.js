@@ -19,3 +19,7 @@ export const setIs = (state, data) => {
 export const setSnapshot = (state, data) => {
   state.snapshot[data.key] = data.val;
 };
+
+export const setPagination = (state, data) => {
+  state.pagination = data;
+};

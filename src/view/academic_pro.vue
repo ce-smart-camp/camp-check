@@ -22,6 +22,11 @@
         และแสดงผลลัพธ์ที่ได้ออกมาจากการทำงานของโปรแกรม<br />
         <i>(เขียนบรรทัดที่ผิด+จุดที่ผิด พร้อมแก้ไขให้ถูกต้อง)</i>
       </p>
+      <v-img
+        :src="require('../assets/question/q-3-2.png')"
+        contain
+        max-height="450px"
+      ></v-img>
     </div>
     <v-textarea
       v-model="form.item2"
@@ -39,6 +44,11 @@
         โดยต้องมีสัญลักษณ์ที่พี่ๆกำหนดให้ด้านล่างนี้เป็นส่วนประกอบ<br />
         <i>(Hint : ขั้นตอนดำเนินการอยู่ในเว็บไซต์สมัคร)</i>
       </p>
+      <v-img
+        :src="require('../assets/question/q-3-3.png')"
+        contain
+        max-height="75px"
+      ></v-img>
     </div>
     <ImgUp v-model="form.item3" filename="q-3-3" class="pb-4" />
   </v-card-text>

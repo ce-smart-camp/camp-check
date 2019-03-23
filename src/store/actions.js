@@ -30,6 +30,23 @@ let prepareRegData = doc => {
     if (typeof data[key] !== "undefined")
       data[key] = data[key].seconds * 1000 + data[key].nanoseconds / 1000000;
   });
+  if (data.hasOwnProperty("logic")) {
+    data.do = {};
+
+    let cou = 0;
+    ["q1", "q2", "q3"].forEach(key => {
+      if (data.hasOwnProperty(key))
+        for (let key2 in data[key]) cou += data[key][key2] == null ? 0 : 1;
+    });
+    data.do.q1 = cou;
+
+    cou = 0;
+    ["logic", "elect", "pro", "iot"].forEach(key => {
+      if (data.hasOwnProperty(key))
+        for (let key2 in data[key]) cou += data[key][key2] == null ? 0 : 1;
+    });
+    data.do.q2 = cou;
+  }
   return data;
 };
 

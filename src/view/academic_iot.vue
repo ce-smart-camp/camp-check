@@ -29,8 +29,7 @@
       rows="5"
       label="ของที่ใช้ในการทำโปรเจคมีอะไรบ้าง"
       box
-      :readonly="readonly"
-      :disabled="disable && !readonly"
+      readonly
     />
     <v-textarea
       v-model="form.item4"

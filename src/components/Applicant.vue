@@ -52,9 +52,6 @@ export default {
   data() {
     return {
       search: "",
-      pagination: {
-        sortBy: "created_at"
-      },
       rowsPerPageItems: [
         50,
         100,
@@ -75,6 +72,14 @@ export default {
   computed: {
     campers() {
       return this.$store.state.list.reg;
+    },
+    pagination: {
+      get() {
+        return this.$store.state.pagination;
+      },
+      set(value) {
+        this.$store.commit("setPagination", value);
+      }
     }
   }
 };

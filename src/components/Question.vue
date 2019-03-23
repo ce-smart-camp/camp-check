@@ -10,10 +10,16 @@
       >
         <template v-slot:items="props">
           <td class="text-xs-left">{{ props.item.id }}</td>
+          <td class="text-xs-left"></td>
           <td class="text-xs-left">
-            {{ new Date(props.item.update_at).toLocaleString() }}
+            {{
+              props.item.completed_at
+                ? new Date(props.item.completed_at).toLocaleString()
+                : ""
+            }}
           </td>
           <td>
+            {{ props.item.do.q1 }}
             <v-btn
               flat
               icon
@@ -24,6 +30,7 @@
             </v-btn>
           </td>
           <td>
+            {{ props.item.do.q2 }}
             <v-btn
               flat
               icon
@@ -43,9 +50,6 @@
 export default {
   data() {
     return {
-      pagination: {
-        sortBy: "update_at"
-      },
       rowsPerPageItems: [
         50,
         100,
@@ -53,16 +57,25 @@ export default {
         { text: "$vuetify.dataIterator.rowsPerPageAll", value: -1 }
       ],
       headers: [
-        { text: "ID", align: "center", sortable: false, value: "id" },
-        { text: "update_at", align: "center", value: "update_at" },
-        { text: "Q1", align: "center", value: "q1", sortable: false },
-        { text: "Q2", align: "center", value: "q2", sortable: false }
+        { text: "ID", align: "center", value: "id" },
+        { text: "do", align: "center", sortable: false, value: "do" },
+        { text: "completed_at", align: "center", value: "completed_at" },
+        { text: "Q1", align: "center", value: "do.q1" },
+        { text: "Q2", align: "center", value: "do.q2" }
       ]
     };
   },
   computed: {
     question() {
       return this.$store.state.list.qus;
+    },
+    pagination: {
+      get() {
+        return this.$store.state.pagination;
+      },
+      set(value) {
+        this.$store.commit("setPagination", value);
+      }
     }
   }
 };

@@ -29,7 +29,8 @@ const state = {
   },
   dbSnapshot: null,
   applicant: [],
-  applicantKey: {}
+  applicantKey: {},
+  pagination: {}
 };
 
 const store = new Vuex.Store({
