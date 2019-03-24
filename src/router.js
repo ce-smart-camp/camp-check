@@ -47,10 +47,7 @@ const router = new VueRouter({
       component: Question,
       beforeEnter: (to, from, next) => {
         if (to.path === "/q" && from.path === "/")
-          Store.commit("setPagination", {
-            sortBy: "completed_at",
-            descending: true
-          });
+          Store.commit("setPagination", { sortBy: "completed_at" });
         next();
       }
     },

@@ -52,7 +52,7 @@ let prepareRegData = doc => {
 
 export const setupDB = ({ commit, state }) => {
   if (!state.is.setupDB) {
-    ["reg", "qus", "check"].forEach(key => {
+    ["check"].forEach(key => {
       let unsubscribe = db.collection(key).onSnapshot(function(snapshot) {
         snapshot.docChanges().forEach(function(change) {
           if (change.type === "added") {
@@ -66,6 +66,30 @@ export const setupDB = ({ commit, state }) => {
           }
         });
       });
+      commit("setSnapshot", { key: key, val: unsubscribe });
+    });
+
+    ["qus"].forEach(key => {
+      let unsubscribe = db
+        .collection(key)
+        .where(
+          "completed_at",
+          ">",
+          firebase.firestore.Timestamp.fromDate(new Date("2019-03-01T00:00:00"))
+        )
+        .onSnapshot(function(snapshot) {
+          snapshot.docChanges().forEach(function(change) {
+            if (change.type === "added") {
+              commit("addData", { key: key, val: prepareRegData(change.doc) });
+            }
+            if (change.type === "modified") {
+              commit("editData", { key: key, val: prepareRegData(change.doc) });
+            }
+            if (change.type === "removed") {
+              console.log("Removed " + key + ": ", change.doc.data());
+            }
+          });
+        });
       commit("setSnapshot", { key: key, val: unsubscribe });
     });
 

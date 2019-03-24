@@ -1,10 +1,14 @@
 <template>
   <div class="text-xs-center">
-    <v-img :src="imageUrl" max-height="500" contain />
+    <v-img v-if="value" :src="imageUrl" max-height="500" contain />
 
     <v-alert :value="!value" type="warning">
       น้องๆไม่ได้อัปโหลดรูปภาพ
     </v-alert>
+
+    <v-btn v-if="imageUrl" color="success" :href="imageUrl" target="_blank"
+      >ดูรูป</v-btn
+    >
   </div>
 </template>
 
