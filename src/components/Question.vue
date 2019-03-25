@@ -10,7 +10,9 @@
       >
         <template v-slot:items="props">
           <td class="text-xs-left">{{ props.item.id }}</td>
-          <td class="text-xs-left"></td>
+          <td class="text-xs-left">{{ props.item.score.q1 }}</td>
+          <td class="text-xs-left">{{ props.item.score.q2 }}</td>
+          <td class="text-xs-left">{{ props.item.score.sum }}</td>
           <td class="text-xs-left">
             {{
               props.item.completed_at
@@ -58,7 +60,9 @@ export default {
       ],
       headers: [
         { text: "ID", align: "center", value: "id" },
-        { text: "do", align: "center", sortable: false, value: "do" },
+        { text: "Q1", align: "center", value: "score.q1" },
+        { text: "Q2", align: "center", value: "score.q2" },
+        { text: "SUM", align: "center", value: "score.sum" },
         { text: "completed_at", align: "center", value: "completed_at" },
         { text: "Q1", align: "center", value: "do.q1" },
         { text: "Q2", align: "center", value: "do.q2" }

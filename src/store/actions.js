@@ -23,14 +23,14 @@ export const init = ({ commit, dispatch, state }) => {
   }
 };
 
-let prepareRegData = doc => {
+let prepareRegData = (doc, Key, state, commit) => {
   let data = doc.data();
   data.id = doc.id;
   ["created_at", "update_at", "completed_at"].forEach(key => {
     if (typeof data[key] !== "undefined")
       data[key] = data[key].seconds * 1000 + data[key].nanoseconds / 1000000;
   });
-  if (data.hasOwnProperty("logic")) {
+  if (Key === "qus") {
     data.do = {};
 
     let cou = 0;
@@ -46,50 +46,59 @@ let prepareRegData = doc => {
         for (let key2 in data[key]) cou += data[key][key2] == null ? 0 : 1;
     });
     data.do.q2 = cou;
+    data.score = { q1: 0, q2: 0, sum: 0 };
+
+    // มีคะแนนอยู่ แล้ว น้องส่งคำตอบ ----- ไม่น่าเกิดขึ้น
+    if (state.key.check.hasOwnProperty(data.id)) {
+      let checkData = state.list.check[state.key.check[data.id]];
+      data.score = checkData.sum;
+    }
+  } else if (Key === "check") {
+    var sum = { q1: 0, q2: 0 };
+    Object.keys(data).forEach(key => {
+      if (key !== "id") {
+        sum[key.split("-")[0]] += Number(data[key]);
+      }
+    });
+    data.sum = sum;
+
+    // มีคำตอบอยู่ แล้วเพิ่ม คะแนน
+    if (state.key.qus.hasOwnProperty(data.id)) {
+      let qusData = state.list.qus[state.key.qus[data.id]];
+      qusData.score = data.sum;
+      qusData.score.sum = data.sum.q1 + data.sum.q2;
+      commit("editData", { key: "qus", val: qusData });
+    }
   }
   return data;
 };
 
 export const setupDB = ({ commit, state }) => {
   if (!state.is.setupDB) {
-    ["check"].forEach(key => {
-      let unsubscribe = db.collection(key).onSnapshot(function(snapshot) {
+    ["reg", "qus", "check"].forEach(key => {
+      let unsubscribe = db.collection(key);
+      if (key !== "check") {
+        unsubscribe = unsubscribe.where(
+          "completed_at",
+          ">",
+          firebase.firestore.Timestamp.fromDate(new Date("2019-03-01T00:00:00"))
+        );
+      }
+      unsubscribe = unsubscribe.onSnapshot(function(snapshot) {
         snapshot.docChanges().forEach(function(change) {
           if (change.type === "added") {
-            commit("addData", { key: key, val: prepareRegData(change.doc) });
+            let val = prepareRegData(change.doc, key, state, commit);
+            commit("addData", { key: key, val: val });
           }
           if (change.type === "modified") {
-            commit("editData", { key: key, val: prepareRegData(change.doc) });
+            let val = prepareRegData(change.doc, key, state, commit);
+            commit("editData", { key: key, val: val });
           }
           if (change.type === "removed") {
             console.log("Removed " + key + ": ", change.doc.data());
           }
         });
       });
-      commit("setSnapshot", { key: key, val: unsubscribe });
-    });
-
-    ["reg", "qus"].forEach(key => {
-      let unsubscribe = db
-        .collection(key)
-        .where(
-          "completed_at",
-          ">",
-          firebase.firestore.Timestamp.fromDate(new Date("2019-03-01T00:00:00"))
-        )
-        .onSnapshot(function(snapshot) {
-          snapshot.docChanges().forEach(function(change) {
-            if (change.type === "added") {
-              commit("addData", { key: key, val: prepareRegData(change.doc) });
-            }
-            if (change.type === "modified") {
-              commit("editData", { key: key, val: prepareRegData(change.doc) });
-            }
-            if (change.type === "removed") {
-              console.log("Removed " + key + ": ", change.doc.data());
-            }
-          });
-        });
       commit("setSnapshot", { key: key, val: unsubscribe });
     });
 
