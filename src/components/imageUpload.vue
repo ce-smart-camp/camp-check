@@ -56,8 +56,10 @@ export default {
 
     setupFileRef() {
       if (this.fileRef === null) {
-        var filePath = this.$route.params.id + "/" + this.filename;
-        this.fileRef = firebase.storage().ref(filePath);
+        let id = this.$route.params.id;
+        if (!id) id = this.$store.state.list.qus[this.$route.params.idNum].id;
+
+        this.fileRef = firebase.storage().ref(id + "/" + this.filename);
       }
     }
   }

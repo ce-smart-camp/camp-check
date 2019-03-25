@@ -78,11 +78,15 @@ export const setupDB = ({ commit, state }) => {
     ["reg", "qus", "check"].forEach(key => {
       let unsubscribe = db.collection(key);
       if (key !== "check") {
-        unsubscribe = unsubscribe.where(
-          "completed_at",
-          ">",
-          firebase.firestore.Timestamp.fromDate(new Date("2019-03-01T00:00:00"))
-        );
+        unsubscribe = unsubscribe
+          .where(
+            "completed_at",
+            ">",
+            firebase.firestore.Timestamp.fromDate(
+              new Date("2019-03-01T00:00:00")
+            )
+          )
+          .orderBy("completed_at");
       }
       unsubscribe = unsubscribe.onSnapshot(function(snapshot) {
         snapshot.docChanges().forEach(function(change) {

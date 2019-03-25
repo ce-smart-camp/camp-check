@@ -52,12 +52,12 @@ const router = new VueRouter({
       }
     },
     {
-      path: "/q1/:id",
+      path: "/q1/:idNum",
       name: "qid1",
       component: QuestionDetail1
     },
     {
-      path: "/q2/:id",
+      path: "/q2/:idNum",
       name: "qid2",
       component: QuestionDetail2
     }

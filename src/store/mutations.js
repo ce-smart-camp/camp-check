@@ -1,6 +1,7 @@
 export const addData = (state, data) => {
+  data.val.idNum = state.list[data.key].length;
+  state.key[data.key][data.val.id] = state.list[data.key].length;
   state.list[data.key].push(data.val);
-  state.key[data.key][data.val.id] = state.list[data.key].length - 1;
 };
 
 export const editData = (state, data) => {

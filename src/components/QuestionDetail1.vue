@@ -129,18 +129,18 @@ export default {
   },
   computed: {
     form() {
-      return this.$store.getters.getByID("qus", this.$route.params.id);
+      return this.$store.state.list.qus[this.$route.params.idNum];
     }
   },
   mounted() {
-    this.check = this.$store.getters.getByID("check", this.$route.params.id, {
-      sum: { q1: 0, q2: 0 }
-    });
+    if (this.form)
+      this.check = this.$store.getters.getByID("check", this.form.id) || {};
+
     this.$store.subscribe(mutation => {
       if (mutation.type === "editData" || mutation.type === "addData") {
         if (
           mutation.payload.key === "check" &&
-          mutation.payload.val.id === this.$route.params.id
+          mutation.payload.val.id === this.form.id
         ) {
           this.check = mutation.payload.val;
         }
@@ -152,7 +152,7 @@ export default {
       var data = {};
       data[key] = Number(value);
       db.collection("check")
-        .doc(this.$route.params.id)
+        .doc(this.form.id)
         .set(data, { merge: true });
     }
   }
