@@ -69,7 +69,7 @@ export const setupDB = ({ commit, state }) => {
       commit("setSnapshot", { key: key, val: unsubscribe });
     });
 
-    ["qus"].forEach(key => {
+    ["reg", "qus"].forEach(key => {
       let unsubscribe = db
         .collection(key)
         .where(

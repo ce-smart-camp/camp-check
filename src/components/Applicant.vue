@@ -44,10 +44,14 @@
         </v-data-table>
       </v-card>
     </v-layout>
+    <v-btn @click="recheck">Recheck</v-btn>
   </v-container>
 </template>
 
 <script>
+import db from "./../core/db";
+import firebase from "./../core/firebase";
+
 export default {
   data() {
     return {
@@ -80,6 +84,34 @@ export default {
       set(value) {
         this.$store.commit("setPagination", value);
       }
+    }
+  },
+  methods: {
+    recheck() {
+      var batch = db.batch();
+
+      Object.keys(this.$store.state.key.qus).forEach(docID => {
+        if (!this.$store.state.key.reg.hasOwnProperty(docID)) {
+          var regRef = db.collection("reg").doc(docID);
+          batch.update(regRef, {
+            completed_at: firebase.firestore.Timestamp.fromMillis(
+              this.$store.state.list.qus[this.$store.state.key.qus[docID]]
+                .completed_at
+            )
+          });
+        }
+      });
+
+      batch
+        .commit()
+        .then(function() {
+          console.log("finish write");
+        })
+        .catch(err => {
+          if (err.code === "permission-denied")
+            alert("บอกผ่ายเว็บด้วย ถ้าหน้าต่างนี้แสดง");
+          else throw err;
+        });
     }
   }
 };
