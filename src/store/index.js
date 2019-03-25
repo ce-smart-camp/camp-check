@@ -27,9 +27,6 @@ const state = {
     qus: [],
     check: []
   },
-  dbSnapshot: null,
-  applicant: [],
-  applicantKey: {},
   pagination: {}
 };
 
