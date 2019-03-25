@@ -10,124 +10,55 @@
         ></v-img>
       </v-flex>
 
-      <v-flex mb-4>
-        <h1 class="display-2 font-weight-bold mb-3">
-          Welcome to Vuetify
-        </h1>
-        <p class="subheading font-weight-regular">
-          For help and collaboration with other Vuetify developers,
-          <br />please join our online
-          <a href="https://community.vuetifyjs.com" target="_blank"
-            >Discord Community</a
-          >
+      <v-flex>
+        <v-btn color="info" @click="loginBtn">
+          {{ loginBtnText }}
+        </v-btn>
+        <p>
+          {{ loginText }}
         </p>
-      </v-flex>
-
-      <v-flex mb-5 xs12>
-        <h2 class="headline font-weight-bold mb-3">What's next?</h2>
-
-        <v-layout justify-center>
-          <a
-            v-for="(next, i) in whatsNext"
-            :key="i"
-            :href="next.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ next.text }}
-          </a>
-        </v-layout>
-      </v-flex>
-
-      <v-flex xs12 mb-5>
-        <h2 class="headline font-weight-bold mb-3">Important Links</h2>
-
-        <v-layout justify-center>
-          <a
-            v-for="(link, i) in importantLinks"
-            :key="i"
-            :href="link.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ link.text }}
-          </a>
-        </v-layout>
-      </v-flex>
-
-      <v-flex xs12 mb-5>
-        <h2 class="headline font-weight-bold mb-3">Ecosystem</h2>
-
-        <v-layout justify-center>
-          <a
-            v-for="(eco, i) in ecosystem"
-            :key="i"
-            :href="eco.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ eco.text }}
-          </a>
-        </v-layout>
+        <v-btn color="success" to="a">Applicant</v-btn>
+        <v-btn color="success" to="q">Question</v-btn>
       </v-flex>
     </v-layout>
   </v-container>
 </template>
 
 <script>
+import { signIn, signOut } from "./../core/auth";
+import firebase from "./../core/firebase";
 export default {
   data: () => ({
-    ecosystem: [
-      {
-        text: "vuetify-loader",
-        href: "https://github.com/vuetifyjs/vuetify-loader"
-      },
-      {
-        text: "github",
-        href: "https://github.com/vuetifyjs/vuetify"
-      },
-      {
-        text: "awesome-vuetify",
-        href: "https://github.com/vuetifyjs/awesome-vuetify"
+    loginBtnText: "Login",
+    loginText: "",
+    isLogin: false
+  }),
+  mounted() {
+    firebase.auth().onAuthStateChanged(user => {
+      this.isLogin = !!user;
+      this.changeText();
+    });
+  },
+  methods: {
+    loginBtn: function() {
+      if (this.isLogin) {
+        signOut();
+      } else {
+        signIn();
       }
-    ],
-    importantLinks: [
-      {
-        text: "Documentation",
-        href: "https://vuetifyjs.com"
-      },
-      {
-        text: "Chat",
-        href: "https://community.vuetifyjs.com"
-      },
-      {
-        text: "Made with Vuetify",
-        href: "https://madewithvuetifyjs.com"
-      },
-      {
-        text: "Twitter",
-        href: "https://twitter.com/vuetifyjs"
-      },
-      {
-        text: "Articles",
-        href: "https://medium.com/vuetify"
+    },
+    changeText: function() {
+      if (this.isLogin) {
+        this.loginBtnText = "ออกจากระบบ";
+        this.loginText =
+          "ลงชื่อเข้าใช้ด้วยชื่อ " +
+          firebase.auth().currentUser.providerData[0].displayName;
+      } else {
+        this.loginBtnText = "ลงชื่อเข้าใช้";
+        this.loginText = "";
       }
-    ],
-    whatsNext: [
-      {
-        text: "Explore components",
-        href: "https://vuetifyjs.com/components/api-explorer"
-      },
-      {
-        text: "Select a layout",
-        href: "https://vuetifyjs.com/layout/pre-defined"
-      },
-      {
-        text: "Frequently Asked Questions",
-        href: "https://vuetifyjs.com/getting-started/frequently-asked-questions"
-      }
-    ]
-  })
+    }
+  }
 };
 </script>
 
