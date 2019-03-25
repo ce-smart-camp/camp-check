@@ -1,7 +1,7 @@
 <template>
   <v-container grid-list-xl>
     <v-layout v-if="form" wrap>
-      <v-flex v-for="qus in questions" :key="qus.key1 + '.' + qus.key2" xs12>
+      <v-flex v-for="qus in questions" :key="qus.item" xs12>
         <v-card>
           <v-card-text>
             <div class="my-3">
@@ -45,6 +45,16 @@
               readonly
               auto-grow
             />
+
+            <v-text-field
+              :value="check[qus.item]"
+              class="mt-0 pt-0"
+              type="number"
+              label="คะแนน"
+              outline
+              placeholder="0.00"
+              @change="v => updateData(qus.item, v)"
+            ></v-text-field>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -54,6 +64,7 @@
 
 <script>
 import ImgUp from "./../components/imageUpload";
+import db from "./../core/db";
 
 export default {
   components: {
@@ -61,13 +72,15 @@ export default {
   },
   data() {
     return {
+      check: {},
       questions: [
         {
           text: `1. พี่กระต่ายเป็นเศรษฐีรวยระดับพันล้าน วันหนึ่งนึกสนุกจึงได้มอบภารกิจให้พี่เจตซึ่งเป็นลูกน้อง
             โดยให้ทำการหาว่าโทรศัพท์ของพี่กระต่ายจะพังเมื่อตกจากตึกชั้นที่ต่ำสุดชั้นใดจากตึกที่มี 1,000 ชั้น!!! โดยพี่กระต่ายมีโทรศัพท์ให้ใช้ทดลอง Drop test
             ครั้งนี้อยู่ทั้งหมด 10 เครื่อง น้องๆจะช่วยพี่เจตหาคำตอบของภารกิจนี้ได้อย่างไร`,
           key1: "logic",
-          key2: "item1"
+          key2: "item1",
+          item: "q2-1"
         },
         {
           text: `2. ในงานเลี้ยงปีใหม่ของรุ่นพี่สตาฟ CE Smart Camp ครั้งที่12 มีการจับฉลากกันเพื่อลุ้นรางวัล โดย MC ได้บอกกับผู้ร่วมงานว่า
@@ -75,7 +88,8 @@ export default {
             และมีคูปองที่ไม่ใช่มูลค่า 1000บาทสองใบ พี่ๆสตาฟที่เข้าร่วมงานจึงอยากรู้ว่า ถุงที่ใช้จับรางวัลนั้นมีคูปองอยู่กี่ใบ
             จึงอยากให้น้องๆช่วยพี่ๆคิดพร้อมแสดงวิธีการหาคำตอบให้พี่ๆหน่อย`,
           key1: "logic",
-          key2: "item2"
+          key2: "item2",
+          item: "q2-2"
         },
         {
           text: [
@@ -95,12 +109,14 @@ export default {
             `จงหาวันเกิดของสมบัติพร้อมแสดงวิธีการหา`
           ],
           key1: "logic",
-          key2: "item3"
+          key2: "item3",
+          item: "q2-3"
         },
         {
           text: `4. น้องๆคิดว่าในค่ายของเราจะใช้อุปกรณ์ทางอิเล็กทรอนิกส์หรือโมดูลอะไรบ้างลองยกตัวอย่างมาให้มากที่สุด`,
           key1: "elect",
-          key2: "item1"
+          key2: "item1",
+          item: "q2-4"
         },
         {
           text: [
@@ -110,13 +126,15 @@ export default {
           ],
           img: require("../assets/question/q-2-2.png"),
           key1: "elect",
-          key2: "item2"
+          key2: "item2",
+          item: "q2-5"
         },
         {
           text: `6. จากวงจรด้านล่าง ถ้าถ่าน 9V ยังมีประจุอยู่ หากกดสวิตซ์จะเกิดอะไรขึ้น`,
           img: require("../assets/question/q-2-3.png"),
           key1: "elect",
-          key2: "item3"
+          key2: "item3",
+          item: "q2-6"
         },
         {
           text: [
@@ -124,7 +142,8 @@ export default {
             `<code>\\* “CE*Smart*Camp” #12 */</code>`
           ],
           key1: "pro",
-          key2: "item1"
+          key2: "item1",
+          item: "q2-7"
         },
         {
           text: [
@@ -134,7 +153,8 @@ export default {
           ],
           img: require("../assets/question/q-3-2.png"),
           key1: "pro",
-          key2: "item2"
+          key2: "item2",
+          item: "q2-8"
         },
         {
           text: [
@@ -145,7 +165,8 @@ export default {
           img: require("../assets/question/q-3-3.png"),
           imgUp: "q-3-3",
           key1: "pro",
-          key2: "item3"
+          key2: "item3",
+          item: "q2-9"
         },
         {
           text: `10. IoT(Internet of Things) ที่เริ่มได้ยินกันติดหูกันในปัจจุบันนั้นก็คือ การที่อุปกรณ์อิเล็กทรอนิกส์อะไรก็ตามนั้นสามารถเชื่อมโยงสู่โลกอินเตอร์เน็ตได้
@@ -162,12 +183,14 @@ export default {
               key: "item4"
             },
             { text: `สามารถนำไปต่อยอดได้อย่าง`, key: "item5" }
-          ]
+          ],
+          item: "q2-10"
         },
         {
           text: `11) EXTRA ข้อไหนที่น้องๆคิดว่ายากสุด ไม่อยากทำ`,
           key1: "iot",
-          key2: "item9"
+          key2: "item9",
+          item: "q2-11"
         }
       ]
     };
@@ -177,6 +200,30 @@ export default {
       return this.$store.state.list.qus[
         this.$store.state.key.qus[this.$route.params.id]
       ];
+    }
+  },
+  mounted() {
+    this.check = this.$store.getters.getByID("check", this.$route.params.id, {
+      sum: { q1: 0, q2: 0 }
+    });
+    this.$store.subscribe(mutation => {
+      if (mutation.type === "editData" || mutation.type === "addData") {
+        if (
+          mutation.payload.key === "check" &&
+          mutation.payload.val.id === this.$route.params.id
+        ) {
+          this.check = mutation.payload.val;
+        }
+      }
+    });
+  },
+  methods: {
+    updateData(key, value) {
+      var data = {};
+      data[key] = Number(value);
+      db.collection("check")
+        .doc(this.$route.params.id)
+        .set(data, { merge: true });
     }
   }
 };
