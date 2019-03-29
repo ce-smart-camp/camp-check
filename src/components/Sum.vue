@@ -68,10 +68,12 @@
 </template>
 
 <script>
+import Store from "./../store";
+
 export default {
   data() {
     return {
-      search: "",
+      search: null,
       rowsPerPageItems: [
         50,
         100,
@@ -103,6 +105,14 @@ export default {
         this.$store.commit("setPagination", value);
       }
     }
+  },
+  beforeRouteEnter(to, from, next) {
+    if (to.path === "/s" && from.path === "/")
+      Store.commit("setPagination", {
+        sortBy: "score.sum",
+        descending: true
+      });
+    next();
   }
 };
 </script>

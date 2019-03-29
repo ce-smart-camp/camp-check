@@ -1,72 +1,89 @@
 <template>
-  <v-container>
-    <v-layout text-xs-center wrap>
-      <v-card>
-        <v-card-title>
-          คำตอบน้อง
-          <v-spacer></v-spacer>
-          <v-text-field
-            v-model="search"
-            append-icon="search"
-            label="หาในตาราง"
-            single-line
-            hide-details
-          ></v-text-field>
-        </v-card-title>
-        <v-data-table
-          :headers="headers"
-          :items="question"
-          :rows-per-page-items="rowsPerPageItems"
-          :search="search"
-          :pagination.sync="pagination"
-          class="elevation-1"
-        >
-          <template v-slot:items="props">
-            <td class="text-xs-left">{{ props.item.idNum }}</td>
-            <td class="text-xs-left">{{ props.item.score.q1 }}</td>
-            <td class="text-xs-left">{{ props.item.score.q2 }}</td>
-            <td class="text-xs-left">{{ props.item.score.sum }}</td>
-            <td class="text-xs-left">
-              {{
-                props.item.completed_at
-                  ? new Date(props.item.completed_at).toLocaleString()
-                  : ""
-              }}
-            </td>
-            <td>
-              {{ props.item.do.q1 }}
-              <v-btn
-                flat
-                icon
-                color="indigo"
-                :to="{ name: 'qid1', params: { idNum: props.item.idNum } }"
-              >
-                <v-icon small class="mr-2 pl-2">insert_comment</v-icon>
-              </v-btn>
-            </td>
-            <td>
-              {{ props.item.do.q2 }}
-              <v-btn
-                flat
-                icon
-                color="indigo"
-                :to="{ name: 'qid2', params: { idNum: props.item.idNum } }"
-              >
-                <v-icon small class="mr-2 pl-2">insert_comment</v-icon>
-              </v-btn>
-            </td>
-          </template>
-        </v-data-table>
-      </v-card>
+  <v-container grid-list-xl>
+    <v-layout wrap>
+      <v-flex xs12>
+        <v-card>
+          <v-card-title primary-title>
+            <h3 class="headline mb-0">คำถามที่น้องส่งมา</h3>
+          </v-card-title>
+          <v-card-actions>
+            <v-btn color="orange darken-2" dark to="/"
+              ><v-icon dark left>arrow_back</v-icon>กลับไปหน้าหลัก</v-btn
+            >
+          </v-card-actions>
+        </v-card>
+      </v-flex>
+
+      <v-flex>
+        <v-card>
+          <v-card-title>
+            คำตอบน้อง
+            <v-spacer></v-spacer>
+            <v-text-field
+              v-model="search"
+              append-icon="search"
+              label="หาในตาราง"
+              single-line
+              hide-details
+            ></v-text-field>
+          </v-card-title>
+          <v-data-table
+            :headers="headers"
+            :items="question"
+            :rows-per-page-items="rowsPerPageItems"
+            :search="search"
+            :pagination.sync="pagination"
+            class="elevation-1"
+          >
+            <template v-slot:items="props">
+              <td class="text-xs-left">{{ props.item.idNum + 1 }}</td>
+              <td class="text-xs-right">{{ props.item.score.q1 }}</td>
+              <td class="text-xs-right">{{ props.item.score.q2 }}</td>
+              <td class="text-xs-right">{{ props.item.score.sum }}</td>
+              <td class="text-xs-left">
+                {{
+                  props.item.completed_at
+                    ? new Date(props.item.completed_at).toLocaleString()
+                    : ""
+                }}
+              </td>
+              <td class="text-xs-right">
+                {{ props.item.do.q1 }}
+                <v-btn
+                  flat
+                  icon
+                  color="indigo"
+                  :to="{ name: 'qid1', params: { idNum: props.item.idNum } }"
+                >
+                  <v-icon small class="mr-2 pl-2">insert_comment</v-icon>
+                </v-btn>
+              </td>
+              <td class="text-xs-right">
+                {{ props.item.do.q2 }}
+                <v-btn
+                  flat
+                  icon
+                  color="indigo"
+                  :to="{ name: 'qid2', params: { idNum: props.item.idNum } }"
+                >
+                  <v-icon small class="mr-2 pl-2">insert_comment</v-icon>
+                </v-btn>
+              </td>
+            </template>
+          </v-data-table>
+        </v-card>
+      </v-flex>
     </v-layout>
   </v-container>
 </template>
 
 <script>
+import Store from "./../store";
+
 export default {
   data() {
     return {
-      search: "",
+      search: null,
       rowsPerPageItems: [
         50,
         100,
@@ -96,6 +113,11 @@ export default {
         this.$store.commit("setPagination", value);
       }
     }
+  },
+  beforeRouteEnter(to, from, next) {
+    if (to.path === "/q" && from.path === "/")
+      Store.commit("setPagination", { sortBy: "completed_at" });
+    next();
   }
 };
 </script>

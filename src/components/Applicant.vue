@@ -52,11 +52,12 @@
 <script>
 import db from "./../core/db";
 import firebase from "./../core/firebase";
+import Store from "./../store";
 
 export default {
   data() {
     return {
-      search: "",
+      search: null,
       rowsPerPageItems: [
         50,
         100,
@@ -115,6 +116,11 @@ export default {
           else throw err;
         });
     }
+  },
+  beforeRouteEnter(to, from, next) {
+    if (to.path === "/a" && from.path === "/")
+      Store.commit("setPagination", { sortBy: "created_at" });
+    next();
   }
 };
 </script>
