@@ -15,16 +15,22 @@ import Sum from "./components/Sum";
 const router = new VueRouter({
   mode: "history",
   base: __dirname,
-  scrollBehavior: (to, from, savedPosition) => {
+  scrollBehavior(to, from, savedPosition) {
     let scrollTo = 0;
 
     if (to.hash) {
       scrollTo = to.hash;
+    } else if (to.name === from.name) {
+      scrollTo = 0;
     } else if (savedPosition) {
       scrollTo = savedPosition.y;
     }
 
-    return goTo(scrollTo);
+    return new Promise(resolve => {
+      goTo(scrollTo).then(() => {
+        resolve({ x: 0, y: scrollTo });
+      });
+    });
   },
   routes: [
     { path: "/", component: HelloWorld },

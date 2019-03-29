@@ -6,15 +6,19 @@
           <v-card-title primary-title>
             <h3 class="headline mb-0">ตรวจคำตอบ คำถาม Part 1</h3>
             <v-spacer />
-            <h2>คะแนน : {{ check.sum ? check.sum.q1 : 0 }}</h2>
+            <h2>
+              คะแนน : {{ check.sum ? check.sum.q2 : 0 }} || รวม :
+              {{ check.sum ? check.sum.sum : 0 }}
+            </h2>
           </v-card-title>
           <v-card-actions>
-            <v-btn color="orange darken-2" dark :to="{ name: 'q' }"
-              ><v-icon dark left>arrow_back</v-icon>กลับไปหน้าตารางคำถาม</v-btn
+            <v-btn color="orange darken-2" dark @click="$router.go(-1)"
+              ><v-icon dark left>arrow_back</v-icon>ย้อนกลับ</v-btn
             ><v-spacer /><v-btn
               color="purple"
               dark
               :to="{ name: 'qid2', params: { idNum: $route.params.idNum } }"
+              replace
               >คำถาม Part 2</v-btn
             >
           </v-card-actions>
@@ -56,6 +60,18 @@
               placeholder="0.00"
               @change="v => updateData(qus.item, v)"
             ></v-text-field>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+
+      <v-flex>
+        <v-card>
+          <v-card-text class="text-xs-center">
+            <v-pagination
+              v-model="page"
+              :length="$store.state.list.qus.length"
+              total-visible="13"
+            ></v-pagination>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -164,7 +180,7 @@ export default {
         return Number(this.$route.params.idNum) + 1;
       },
       set(value) {
-        this.$router.push({ name: "qid1", params: { idNum: value - 1 } }); // !!router name
+        this.$router.replace({ name: "qid1", params: { idNum: value - 1 } }); // !!router name
       }
     }
   },

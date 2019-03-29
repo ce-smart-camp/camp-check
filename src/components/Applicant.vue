@@ -1,51 +1,67 @@
 <template>
-  <v-container>
-    <v-layout text-xs-center wrap>
-      <v-card>
-        <v-card-title>
-          รายชื่อน้อง
-          <v-spacer></v-spacer>
-          <v-text-field
-            v-model="search"
-            append-icon="search"
-            label="Search"
-            single-line
-            hide-details
-          ></v-text-field>
-        </v-card-title>
-        <v-data-table
-          :headers="headers"
-          :items="campers"
-          :rows-per-page-items="rowsPerPageItems"
-          :search="search"
-          :pagination.sync="pagination"
-          class="elevation-1"
-        >
-          <template v-slot:items="props">
-            <td class="text-xs-left">{{ props.item.id }}</td>
-            <td class="text-xs-left">{{ props.item.info.pic ? "Y" : "" }}</td>
-            <td class="text-xs-left">{{ props.item.info.name }}</td>
-            <td class="text-xs-left">{{ props.item.info.surname }}</td>
-            <td class="text-xs-left">{{ props.item.info.nickname }}</td>
-            <td class="text-xs-left">{{ props.item.info.gender }}</td>
-            <td class="text-xs-left">
-              {{ new Date(props.item.created_at).toLocaleString() }}
-            </td>
-            <td class="justify-center layout px-0">
-              <v-btn
-                flat
-                icon
-                color="indigo"
-                :to="{ name: 'aid', params: { id: props.item.id } }"
-              >
-                <v-icon small class="mr-2 pl-2">insert_comment</v-icon>
-              </v-btn>
-            </td>
-          </template>
-        </v-data-table>
-      </v-card>
+  <v-container grid-list-xl>
+    <v-layout wrap>
+      <v-flex xs12>
+        <v-card>
+          <v-card-title primary-title>
+            <h3 class="headline mb-0">รายชื่อน้องที่ส่งใบสมัคร</h3>
+          </v-card-title>
+          <v-card-actions>
+            <v-btn color="orange darken-2" dark to="/"
+              ><v-icon dark left>arrow_back</v-icon>กลับไปหน้าหลัก</v-btn
+            >
+          </v-card-actions>
+        </v-card>
+      </v-flex>
+
+      <v-flex>
+        <v-card>
+          <v-card-title>
+            รายชื่อน้อง
+            <v-spacer></v-spacer>
+            <v-text-field
+              v-model="search"
+              append-icon="search"
+              label="Search"
+              single-line
+              hide-details
+            ></v-text-field>
+          </v-card-title>
+          <v-data-table
+            :headers="headers"
+            :items="campers"
+            :rows-per-page-items="rowsPerPageItems"
+            :search="search"
+            :pagination.sync="pagination"
+            class="elevation-1"
+          >
+            <template v-slot:items="props">
+              <td class="text-xs-left">{{ props.item.id }}</td>
+              <td class="text-xs-left">{{ props.item.info.pic ? "Y" : "" }}</td>
+              <td class="text-xs-left">{{ props.item.info.name }}</td>
+              <td class="text-xs-left">{{ props.item.info.surname }}</td>
+              <td class="text-xs-left">{{ props.item.info.nickname }}</td>
+              <td class="text-xs-left">{{ props.item.info.gender }}</td>
+              <td class="text-xs-left">
+                {{ new Date(props.item.created_at).toLocaleString() }}
+              </td>
+              <td class="justify-center layout px-0">
+                <v-btn
+                  flat
+                  icon
+                  color="indigo"
+                  :to="{ name: 'aid', params: { id: props.item.id } }"
+                >
+                  <v-icon small class="mr-2 pl-2">insert_comment</v-icon>
+                </v-btn>
+              </td>
+            </template>
+          </v-data-table>
+        </v-card>
+      </v-flex>
+
+      <v-btn @click="recheck">Recheck</v-btn>
     </v-layout>
-    <v-btn @click="recheck">Recheck</v-btn>
   </v-container>
 </template>
 
