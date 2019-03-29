@@ -19,6 +19,7 @@
         </p>
         <v-btn color="success" to="a">Applicant</v-btn>
         <v-btn color="success" to="q">Question</v-btn>
+        <v-btn color="success" to="s">Sum</v-btn>
       </v-flex>
     </v-layout>
   </v-container>

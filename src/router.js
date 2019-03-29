@@ -10,32 +10,34 @@ import Question from "./components/Question.vue";
 import QuestionDetail1 from "./components/QuestionDetail1";
 import QuestionDetail2 from "./components/QuestionDetail2";
 
-import Store from "./store";
+import Sum from "./components/Sum";
 
 const router = new VueRouter({
   mode: "history",
   base: __dirname,
-  scrollBehavior: (to, from, savedPosition) => {
+  scrollBehavior(to, from, savedPosition) {
     let scrollTo = 0;
 
     if (to.hash) {
       scrollTo = to.hash;
+    } else if (to.name === from.name) {
+      scrollTo = 0;
     } else if (savedPosition) {
       scrollTo = savedPosition.y;
     }
 
-    return goTo(scrollTo);
+    return new Promise(resolve => {
+      goTo(scrollTo).then(() => {
+        resolve({ x: 0, y: scrollTo });
+      });
+    });
   },
   routes: [
     { path: "/", component: HelloWorld },
     {
       path: "/a",
-      component: Applicant,
-      beforeEnter: (to, from, next) => {
-        if (to.path === "/a" && from.path === "/")
-          Store.commit("setPagination", { sortBy: "created_at" });
-        next();
-      }
+      name: "a",
+      component: Applicant
     },
     {
       path: "/a/:id",
@@ -44,22 +46,23 @@ const router = new VueRouter({
     },
     {
       path: "/q",
-      component: Question,
-      beforeEnter: (to, from, next) => {
-        if (to.path === "/q" && from.path === "/")
-          Store.commit("setPagination", { sortBy: "completed_at" });
-        next();
-      }
+      name: "q",
+      component: Question
     },
     {
-      path: "/q1/:idNum",
+      path: "/q/:idNum/q1",
       name: "qid1",
       component: QuestionDetail1
     },
     {
-      path: "/q2/:idNum",
+      path: "/q/:idNum/q2",
       name: "qid2",
       component: QuestionDetail2
+    },
+    {
+      path: "/s",
+      name: "s",
+      component: Sum
     }
   ]
 });

@@ -24,3 +24,16 @@ export const setSnapshot = (state, data) => {
 export const setPagination = (state, data) => {
   state.pagination = data;
 };
+
+export const setScore = (state, data) => {
+  const score = data.sum;
+  score.sum = score.q1 + score.q2;
+  const mark = data.mark.sum;
+  mark.sum = mark.q1 + mark.q2;
+  if (state.key.qus.hasOwnProperty(data.id)) {
+    Object.assign(state.list.qus[state.key.qus[data.id]], { score, mark });
+  }
+  if (state.key.reg.hasOwnProperty(data.id)) {
+    Object.assign(state.list.reg[state.key.reg[data.id]], { score, mark });
+  }
+};
