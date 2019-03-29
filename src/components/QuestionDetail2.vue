@@ -1,6 +1,33 @@
 <template>
   <v-container grid-list-xl>
     <v-layout v-if="form" wrap>
+      <v-flex xs12>
+        <v-card>
+          <v-card-title primary-title>
+            <h3 class="headline mb-0">ตรวจคำตอบ คำถาม Part 2</h3>
+            <v-spacer />
+            <h2>คะแนน : {{ check.sum ? check.sum.q2 : 0 }}</h2>
+          </v-card-title>
+          <v-card-actions>
+            <v-btn color="orange darken-2" dark :to="{ name: 'q' }"
+              ><v-icon dark left>arrow_back</v-icon>กลับไปหน้าตารางคำถาม</v-btn
+            ><v-spacer /><v-btn
+              color="purple"
+              dark
+              :to="{ name: 'qid1', params: { idNum: $route.params.idNum } }"
+              >คำถาม Part 1</v-btn
+            >
+          </v-card-actions>
+          <v-card-text class="text-xs-center">
+            <v-pagination
+              v-model="page"
+              :length="$store.state.list.qus.length"
+              total-visible="13"
+            ></v-pagination>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+
       <v-flex v-for="qus in questions" :key="qus.item" xs12>
         <v-card>
           <v-card-text>
@@ -192,28 +219,25 @@ export default {
           key2: "item9",
           item: "q2-11"
         }
-      ]
+      ],
+      storeUnsub: null
     };
   },
   computed: {
     form() {
       return this.$store.state.list.qus[this.$route.params.idNum];
+    },
+    page: {
+      get() {
+        return Number(this.$route.params.idNum) + 1;
+      },
+      set(value) {
+        this.$router.push({ name: "qid2", params: { idNum: value - 1 } }); // !!router name
+      }
     }
   },
   mounted() {
-    if (this.form)
-      this.check = this.$store.getters.getByID("check", this.form.id) || {};
-
-    this.$store.subscribe(mutation => {
-      if (mutation.type === "editData" || mutation.type === "addData") {
-        if (
-          mutation.payload.key === "check" &&
-          mutation.payload.val.id === this.form.id
-        ) {
-          this.check = mutation.payload.val;
-        }
-      }
-    });
+    this.setupCheck();
   },
   methods: {
     updateData(key, value) {
@@ -222,7 +246,32 @@ export default {
       db.collection("check")
         .doc(this.form.id)
         .set(data, { merge: true });
+    },
+    setupCheck() {
+      if (this.storeUnsub !== null) this.storeUnsub();
+
+      if (this.form)
+        this.check = this.$store.getters.getByID("check", this.form.id) || {};
+
+      this.storeUnsub = this.$store.subscribe(mutation => {
+        if (mutation.type === "editData" || mutation.type === "addData") {
+          if (
+            mutation.payload.key === "check" &&
+            mutation.payload.val.id === this.form.id
+          ) {
+            this.check = mutation.payload.val;
+          }
+        }
+      });
     }
+  },
+  beforeRouteUpdate(to, from, next) {
+    next();
+    this.setupCheck();
+  },
+  beforeRouteLeave(to, from, next) {
+    if (this.storeUnsub !== null) this.storeUnsub();
+    next();
   }
 };
 </script>
