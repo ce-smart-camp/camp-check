@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-toolbar app>
+    <!-- <v-toolbar app>
       <v-toolbar-title class="headline text-uppercase">
         <span>Vuetify</span>
         <span class="font-weight-light">MATERIAL DESIGN</span>
@@ -13,10 +13,24 @@
       >
         <span class="mr-2">Latest Release</span>
       </v-btn>
-    </v-toolbar>
+    </v-toolbar> -->
 
     <v-content>
       <router-view></router-view>
+      <v-fab-transition>
+        <v-btn
+          key="keyboard_arrow_up"
+          color="green"
+          dark
+          fab
+          fixed
+          bottom
+          right
+          @click="$vuetify.goTo(0)"
+        >
+          <v-icon>keyboard_arrow_up</v-icon>
+        </v-btn>
+      </v-fab-transition>
     </v-content>
   </v-app>
 </template>
