@@ -7,8 +7,8 @@
             <h3 class="headline mb-0">ตรวจคำตอบ คำถาม Part 1</h3>
             <v-spacer />
             <h2>
-              คะแนน : {{ check.sum ? check.sum.q2 : 0 }} || รวม :
-              {{ check.sum ? check.sum.sum : 0 }}
+              คะแนน : {{ check.sum ? check.sum.q2 || 0 : 0 }} || รวม :
+              {{ check.sum ? check.sum.sum || 0 : 0 }}
             </h2>
           </v-card-title>
           <v-card-actions>
@@ -26,14 +26,14 @@
             <v-pagination
               v-model="page"
               :length="$store.state.list.qus.length"
-              total-visible="13"
+              total-visible="10"
             ></v-pagination>
           </v-card-text>
         </v-card>
       </v-flex>
 
       <v-flex v-for="qus in questions" :key="qus.item" xs12>
-        <v-card>
+        <v-card :dark="check.mark[qus.item]">
           <v-card-text>
             <div class="my-3">
               <p v-if="typeof qus.text === 'string'">{{ qus.text }}</p>
@@ -43,23 +43,46 @@
                 /></template>
               </p>
             </div>
-            <v-textarea
-              v-model="form[qus.key1][qus.key2]"
-              rows="5"
-              single-line
-              readonly
-              box
-              auto-grow
-            />
-            <v-text-field
-              :value="check[qus.item]"
-              class="mt-0 pt-0"
-              type="number"
-              label="คะแนน"
-              outline
-              placeholder="0.00"
-              @change="v => updateData(qus.item, v)"
-            ></v-text-field>
+            <transition name="fade" mode="out-in">
+              <v-textarea
+                :key="form[qus.key1][qus.key2]"
+                v-model="form[qus.key1][qus.key2]"
+                :name="qus.item"
+                rows="5"
+                single-line
+                readonly
+                box
+                auto-grow
+              />
+            </transition>
+
+            <v-layout>
+              <v-flex xs4>
+                <v-text-field
+                  :value="check[qus.item]"
+                  class="mt-0 pt-0"
+                  type="number"
+                  label="คะแนน"
+                  outline
+                  placeholder="0.00"
+                  @change="v => updateData('score', qus.item, v)"
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs4>
+                <v-checkbox
+                  :value="check.mark[qus.item]"
+                  label="MARK THIS"
+                  @change="v => updateData('mark', qus.item, v)"
+                ></v-checkbox>
+              </v-flex>
+              <v-flex xs4>
+                <v-text-field
+                  :value="check.comment[qus.item]"
+                  label="Comment"
+                  @change="v => updateData('comment', qus.item, v)"
+                ></v-text-field>
+              </v-flex>
+            </v-layout>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -70,7 +93,7 @@
             <v-pagination
               v-model="page"
               :length="$store.state.list.qus.length"
-              total-visible="13"
+              total-visible="10"
             ></v-pagination>
           </v-card-text>
         </v-card>
@@ -85,7 +108,7 @@ import db from "./../core/db";
 export default {
   data() {
     return {
-      check: {},
+      check: { mark: {}, comment: {} },
       questions: [
         {
           text: `1. สมมติว่าน้องได้รับเครื่องมือที่ทำให้น้องเดินทางไปยังโลกอนาคตและย้อนกลับไปในอดีตได้
@@ -188,9 +211,14 @@ export default {
     this.setupCheck();
   },
   methods: {
-    updateData(key, value) {
+    updateData(Key, key, value) {
       var data = {};
-      data[key] = Number(value);
+      if (Key !== "score") {
+        data[Key] = {};
+        data[Key][key] = value;
+      } else {
+        data[key] = Number(value);
+      }
       db.collection("check")
         .doc(this.form.id)
         .set(data, { merge: true });
@@ -198,8 +226,13 @@ export default {
     setupCheck() {
       if (this.storeUnsub !== null) this.storeUnsub();
 
-      if (this.form)
-        this.check = this.$store.getters.getByID("check", this.form.id) || {};
+      if (this.form) {
+        this.check = this.$store.getters.getByID("check", this.form.id) || {
+          comment: {},
+          mark: {},
+          sum: {}
+        };
+      }
 
       this.storeUnsub = this.$store.subscribe(mutation => {
         if (mutation.type === "editData" || mutation.type === "addData") {

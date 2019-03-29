@@ -7,8 +7,8 @@
             <h3 class="headline mb-0">ตรวจคำตอบ คำถาม Part 2</h3>
             <v-spacer />
             <h2>
-              คะแนน : {{ check.sum ? check.sum.q2 : 0 }} || รวม :
-              {{ check.sum ? check.sum.sum : 0 }}
+              คะแนน : {{ check.sum ? check.sum.q2 || 0 : 0 }} || รวม :
+              {{ check.sum ? check.sum.sum || 0 : 0 }}
             </h2>
           </v-card-title>
           <v-card-actions>
@@ -26,14 +26,14 @@
             <v-pagination
               v-model="page"
               :length="$store.state.list.qus.length"
-              total-visible="13"
+              total-visible="10"
             ></v-pagination>
           </v-card-text>
         </v-card>
       </v-flex>
 
       <v-flex v-for="qus in questions" :key="qus.item" xs12>
-        <v-card>
+        <v-card :dark="check.mark[qus.item]">
           <v-card-text>
             <div class="my-3">
               <p v-if="typeof qus.text === 'string'">{{ qus.text }}</p>
@@ -50,42 +50,73 @@
               ></v-img>
             </div>
 
-            <ImgUp
-              v-if="qus.imgUp"
-              v-model="form[qus.key1][qus.key2]"
-              :filename="qus.imgUp"
-              class="pb-4"
-            />
-            <v-textarea
-              v-for="subQ in qus.key2a"
+            <transition v-if="qus.imgUp" name="fade" mode="out-in">
+              <ImgUp
+                :key="form[qus.key1][qus.key2]"
+                v-model="form[qus.key1][qus.key2]"
+                :filename="qus.imgUp"
+                class="pb-4"
+              />
+            </transition>
+            <transition-group
               v-else-if="qus.key2a"
-              :key="subQ.key"
-              v-model="form[qus.key1][subQ.key]"
-              rows="3"
-              :label="subQ.text"
-              box
-              readonly
-              auto-grow
-            />
-            <v-textarea
-              v-else
-              v-model="form[qus.key1][qus.key2]"
-              rows="5"
-              box
-              single-line
-              readonly
-              auto-grow
-            />
+              name="fade"
+              mode="out-in"
+              tag="div"
+            >
+              <v-textarea
+                v-for="subQ in qus.key2a"
+                :key="subQ.key"
+                v-model="form[qus.key1][subQ.key]"
+                rows="3"
+                :label="subQ.text"
+                box
+                readonly
+                auto-grow
+              />
+            </transition-group>
+            <transition v-else name="fade" mode="out-in">
+              <v-textarea
+                :key="form[qus.key1][qus.key2]"
+                v-model="form[qus.key1][qus.key2]"
+                rows="5"
+                box
+                single-line
+                readonly
+                auto-grow
+              />
+            </transition>
 
-            <v-text-field
-              :value="check[qus.item]"
-              class="mt-0 pt-0"
-              type="number"
-              label="คะแนน"
-              outline
-              placeholder="0.00"
-              @change="v => updateData(qus.item, v)"
-            ></v-text-field>
+            <transition name="fade" mode="out-in">
+              <v-layout>
+                <v-flex xs4>
+                  <v-text-field
+                    :key="check[qus.item]"
+                    :value="check[qus.item]"
+                    class="mt-0 pt-0"
+                    type="number"
+                    label="คะแนน"
+                    outline
+                    placeholder="0.00"
+                    @change="v => updateData('score', qus.item, v)"
+                  ></v-text-field>
+                </v-flex>
+                <v-flex xs4>
+                  <v-checkbox
+                    :value="check.mark[qus.item]"
+                    label="MARK THIS"
+                    @change="v => updateData('mark', qus.item, v)"
+                  ></v-checkbox>
+                </v-flex>
+                <v-flex xs4>
+                  <v-text-field
+                    :value="check.comment[qus.item]"
+                    label="Comment"
+                    @change="v => updateData('comment', qus.item, v)"
+                  ></v-text-field>
+                </v-flex>
+              </v-layout>
+            </transition>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -96,7 +127,7 @@
             <v-pagination
               v-model="page"
               :length="$store.state.list.qus.length"
-              total-visible="13"
+              total-visible="10"
             ></v-pagination>
           </v-card-text>
         </v-card>
@@ -115,7 +146,7 @@ export default {
   },
   data() {
     return {
-      check: {},
+      check: { mark: {}, comment: {} },
       questions: [
         {
           text: `1. พี่กระต่ายเป็นเศรษฐีรวยระดับพันล้าน วันหนึ่งนึกสนุกจึงได้มอบภารกิจให้พี่เจตซึ่งเป็นลูกน้อง
@@ -256,9 +287,14 @@ export default {
     this.setupCheck();
   },
   methods: {
-    updateData(key, value) {
+    updateData(Key, key, value) {
       var data = {};
-      data[key] = Number(value);
+      if (Key !== "score") {
+        data[Key] = {};
+        data[Key][key] = value;
+      } else {
+        data[key] = Number(value);
+      }
       db.collection("check")
         .doc(this.form.id)
         .set(data, { merge: true });
@@ -266,8 +302,13 @@ export default {
     setupCheck() {
       if (this.storeUnsub !== null) this.storeUnsub();
 
-      if (this.form)
-        this.check = this.$store.getters.getByID("check", this.form.id) || {};
+      if (this.form) {
+        this.check = this.$store.getters.getByID("check", this.form.id) || {
+          comment: {},
+          mark: {},
+          sum: {}
+        };
+      }
 
       this.storeUnsub = this.$store.subscribe(mutation => {
         if (mutation.type === "editData" || mutation.type === "addData") {

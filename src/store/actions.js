@@ -66,6 +66,9 @@ let prepareRegData = (doc, Key, state, commit) => {
 
     // มีข้อมูลอยู่ แล้วเพิ่ม คะแนน
     commit("setScore", data);
+
+    data.mark = data.mark || {};
+    data.comment = data.comment || {};
   }
   return data;
 };
