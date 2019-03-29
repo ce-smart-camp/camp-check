@@ -27,10 +27,12 @@ let prepareRegData = (doc, Key, state, commit) => {
   let data = doc.data();
   data.id = doc.id;
   ["created_at", "update_at", "completed_at"].forEach(key => {
-    if (typeof data[key] !== "undefined")
+    if (data.hasOwnProperty(key))
       data[key] = data[key].seconds * 1000 + data[key].nanoseconds / 1000000;
   });
-  if (Key === "qus") {
+  if (Key == "reg") {
+    data.score = { q1: 0, q2: 0, sum: 0 };
+  } else if (Key == "qus") {
     data.do = {};
 
     let cou = 0;
@@ -49,11 +51,11 @@ let prepareRegData = (doc, Key, state, commit) => {
     data.score = { q1: 0, q2: 0, sum: 0 };
 
     // มีคะแนนอยู่ แล้ว น้องส่งคำตอบ ----- ไม่น่าเกิดขึ้น
-    if (state.key.check.hasOwnProperty(data.id)) {
-      let checkData = state.list.check[state.key.check[data.id]];
-      data.score = checkData.sum;
-    }
-  } else if (Key === "check") {
+    // if (state.key.check.hasOwnProperty(data.id)) {
+    //   let checkData = state.list.check[state.key.check[data.id]];
+    //   data.score = checkData.sum;
+    // }
+  } else if (Key == "check") {
     var sum = { q1: 0, q2: 0 };
     Object.keys(data).forEach(key => {
       if (key !== "id") {
@@ -62,13 +64,8 @@ let prepareRegData = (doc, Key, state, commit) => {
     });
     data.sum = sum;
 
-    // มีคำตอบอยู่ แล้วเพิ่ม คะแนน
-    if (state.key.qus.hasOwnProperty(data.id)) {
-      let qusData = state.list.qus[state.key.qus[data.id]];
-      qusData.score = data.sum;
-      qusData.score.sum = data.sum.q1 + data.sum.q2;
-      commit("editData", { key: "qus", val: qusData });
-    }
+    // มีข้อมูลอยู่ แล้วเพิ่ม คะแนน
+    commit("setScore", data);
   }
   return data;
 };

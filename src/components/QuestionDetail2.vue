@@ -8,7 +8,7 @@
               <p v-if="typeof qus.text === 'string'">{{ qus.text }}</p>
               <p v-else>
                 <template v-for="sub in qus.text"
-                  >{{ sub.replace(/\s/g, "X") }}<br :key="sub"
+                  >{{ sub }}<br :key="sub"
                 /></template>
               </p>
               <v-img

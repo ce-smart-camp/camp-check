@@ -10,6 +10,8 @@ import Question from "./components/Question.vue";
 import QuestionDetail1 from "./components/QuestionDetail1";
 import QuestionDetail2 from "./components/QuestionDetail2";
 
+import Sum from "./components/Sum";
+
 import Store from "./store";
 
 const router = new VueRouter({
@@ -60,6 +62,18 @@ const router = new VueRouter({
       path: "/q2/:idNum",
       name: "qid2",
       component: QuestionDetail2
+    },
+    {
+      path: "/s",
+      component: Sum,
+      beforeEnter: (to, from, next) => {
+        if (to.path === "/s" && from.path === "/")
+          Store.commit("setPagination", {
+            sortBy: "score.sum",
+            descending: true
+          });
+        next();
+      }
     }
   ]
 });
