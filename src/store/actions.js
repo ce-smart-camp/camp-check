@@ -32,6 +32,7 @@ let prepareRegData = (doc, Key, state, commit) => {
   });
   if (Key == "reg") {
     data.score = { q1: 0, q2: 0, sum: 0 };
+    data.mark = { q1: 0, q2: 0, sum: 0 };
   } else if (Key == "qus") {
     data.do = {};
 
@@ -49,6 +50,7 @@ let prepareRegData = (doc, Key, state, commit) => {
     });
     data.do.q2 = cou;
     data.score = { q1: 0, q2: 0, sum: 0 };
+    data.mark = { q1: 0, q2: 0, sum: 0 };
 
     // มีคะแนนอยู่ แล้ว น้องส่งคำตอบ ----- ไม่น่าเกิดขึ้น
     // if (state.key.check.hasOwnProperty(data.id)) {
@@ -58,16 +60,22 @@ let prepareRegData = (doc, Key, state, commit) => {
   } else if (Key == "check") {
     var sum = { q1: 0, q2: 0 };
     Object.keys(data).forEach(key => {
-      if (key !== "id") {
+      if (key !== "id" && key !== "mark" && key !== "comment") {
         sum[key.split("-")[0]] += Number(data[key]);
       }
     });
     data.sum = sum;
 
+    data.mark = data.mark || {};
+    var sumMark = { q1: 0, q2: 0 };
+    Object.keys(data.mark).forEach(key => {
+      sumMark[key.split("-")[0]] += data.mark[key] ? 1 : 0;
+    });
+    data.mark.sum = sumMark;
+
     // มีข้อมูลอยู่ แล้วเพิ่ม คะแนน
     commit("setScore", data);
 
-    data.mark = data.mark || {};
     data.comment = data.comment || {};
   }
   return data;

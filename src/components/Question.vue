@@ -48,6 +48,7 @@
                 }}
               </td>
               <td class="text-xs-right">
+                {{ props.item.mark.q1 }} /
                 {{ props.item.do.q1 }}
                 <v-btn
                   flat
@@ -59,6 +60,7 @@
                 </v-btn>
               </td>
               <td class="text-xs-right">
+                {{ props.item.mark.q2 }} /
                 {{ props.item.do.q2 }}
                 <v-btn
                   flat
@@ -96,8 +98,8 @@ export default {
         { text: "Q2", align: "center", value: "score.q2" },
         { text: "SUM", align: "center", value: "score.sum" },
         { text: "completed_at", align: "center", value: "completed_at" },
-        { text: "Q1", align: "center", value: "do.q1" },
-        { text: "Q2", align: "center", value: "do.q2" }
+        { text: "Q1", align: "center", value: "mark.q1" },
+        { text: "Q2", align: "center", value: "mark.q2" }
       ]
     };
   },

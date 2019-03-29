@@ -7,7 +7,11 @@
             <h3 class="headline mb-0">ตรวจคำตอบ คำถาม Part 2</h3>
             <v-spacer />
             <h2>
-              คะแนน : {{ check.sum ? check.sum.q2 || 0 : 0 }} || รวม :
+              MARK :
+              {{
+                check.mark ? (check.mark.sum ? check.mark.sum.q2 || 0 : 0) : 0
+              }}
+              || คะแนน : {{ check.sum ? check.sum.q2 || 0 : 0 }} || รวม :
               {{ check.sum ? check.sum.sum || 0 : 0 }}
             </h2>
           </v-card-title>
@@ -87,36 +91,33 @@
               />
             </transition>
 
-            <transition name="fade" mode="out-in">
-              <v-layout>
-                <v-flex xs4>
-                  <v-text-field
-                    :key="check[qus.item]"
-                    :value="check[qus.item]"
-                    class="mt-0 pt-0"
-                    type="number"
-                    label="คะแนน"
-                    outline
-                    placeholder="0.00"
-                    @change="v => updateData('score', qus.item, v)"
-                  ></v-text-field>
-                </v-flex>
-                <v-flex xs4>
-                  <v-checkbox
-                    :value="check.mark[qus.item]"
-                    label="MARK THIS"
-                    @change="v => updateData('mark', qus.item, v)"
-                  ></v-checkbox>
-                </v-flex>
-                <v-flex xs4>
-                  <v-text-field
-                    :value="check.comment[qus.item]"
-                    label="Comment"
-                    @change="v => updateData('comment', qus.item, v)"
-                  ></v-text-field>
-                </v-flex>
-              </v-layout>
-            </transition>
+            <v-layout>
+              <v-flex xs4>
+                <v-text-field
+                  :value="check[qus.item]"
+                  class="mt-0 pt-0"
+                  type="number"
+                  label="คะแนน"
+                  outline
+                  placeholder="0.00"
+                  @change="v => updateData('score', qus.item, v)"
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs4>
+                <v-checkbox
+                  :value="check.mark[qus.item]"
+                  label="MARK THIS"
+                  @change="v => updateData('mark', qus.item, v)"
+                ></v-checkbox>
+              </v-flex>
+              <v-flex xs4>
+                <v-text-field
+                  :value="check.comment[qus.item]"
+                  label="Comment"
+                  @change="v => updateData('comment', qus.item, v)"
+                ></v-text-field>
+              </v-flex>
+            </v-layout>
           </v-card-text>
         </v-card>
       </v-flex>

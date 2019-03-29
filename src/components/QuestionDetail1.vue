@@ -7,7 +7,11 @@
             <h3 class="headline mb-0">ตรวจคำตอบ คำถาม Part 1</h3>
             <v-spacer />
             <h2>
-              คะแนน : {{ check.sum ? check.sum.q2 || 0 : 0 }} || รวม :
+              MARK :
+              {{
+                check.mark ? (check.mark.sum ? check.mark.sum.q1 || 0 : 0) : 0
+              }}
+              || คะแนน : {{ check.sum ? check.sum.q1 || 0 : 0 }} || รวม :
               {{ check.sum ? check.sum.sum || 0 : 0 }}
             </h2>
           </v-card-title>
