@@ -42,8 +42,8 @@
             <div class="my-3">
               <p v-if="typeof qus.text === 'string'">{{ qus.text }}</p>
               <p v-else>
-                <template v-for="sub in qus.text"
-                  >{{ sub }}<br :key="sub"
+                <template v-for="(sub, index) in qus.text"
+                  >{{ sub }}<br :key="`${qus.item}-qus-${index}`"
                 /></template>
               </p>
               <v-img
@@ -70,7 +70,7 @@
             >
               <v-textarea
                 v-for="subQ in qus.key2a"
-                :key="subQ.key"
+                :key="`${qus.item}-${subQ.key}`"
                 v-model="form[qus.key1][subQ.key]"
                 rows="3"
                 :label="subQ.text"
