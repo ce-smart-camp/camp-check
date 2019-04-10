@@ -36,6 +36,40 @@
         </v-card>
       </v-flex>
 
+      <v-flex xs12>
+        <v-card :dark="check.mark['info']">
+          <v-card-text>
+            <v-layout>
+              <v-flex xs4>
+                <v-text-field
+                  :value="check['info']"
+                  class="mt-0 pt-0"
+                  type="number"
+                  label="คะแนน"
+                  outline
+                  placeholder="0.00"
+                  @change="v => updateData('score', 'info', v)"
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs4>
+                <v-checkbox
+                  :value="check.mark['info']"
+                  label="MARK THIS"
+                  @change="v => updateData('mark', 'info', v)"
+                ></v-checkbox>
+              </v-flex>
+              <v-flex xs4>
+                <v-text-field
+                  :value="check.comment['info']"
+                  label="Comment"
+                  @change="v => updateData('comment', 'info', v)"
+                ></v-text-field>
+              </v-flex>
+            </v-layout>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+
       <v-flex v-for="qus in questions" :key="qus.item" xs12>
         <v-card :dark="check.mark[qus.item]">
           <v-card-text>
