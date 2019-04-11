@@ -1,3 +1,4 @@
+import Home from "./components/HelloWorld.vue";
 import VueRouter from "vue-router";
 import goTo from "vuetify/lib/components/Vuetify/goTo";
 
@@ -25,8 +26,7 @@ const router = new VueRouter({
     {
       path: "/",
       name: "main",
-      component: () =>
-        import(/* webpackChunkName: "main" */ "./components/HelloWorld.vue")
+      component: Home
     },
     {
       path: "/a",
