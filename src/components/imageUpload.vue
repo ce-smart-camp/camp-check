@@ -30,6 +30,13 @@ export default {
     imageUrl: "",
     fileRef: null
   }),
+  watch: {
+    value(val) {
+      this.imageUrl = "";
+      this.fileRef = null;
+      if (val) this.loadImg();
+    }
+  },
   mounted() {
     if (this.value) this.loadImg();
   },

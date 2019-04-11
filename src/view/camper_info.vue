@@ -127,9 +127,7 @@ export default {
       gender: genderOptions,
       religion: religionOptions,
       shirtSize: shirtSizeOptions
-    },
-    date: null,
-    menu: false
+    }
   })
 };
 </script>

@@ -36,14 +36,48 @@
         </v-card>
       </v-flex>
 
+      <v-flex xs12>
+        <v-card :dark="check.mark['info']">
+          <v-card-text>
+            <v-layout>
+              <v-flex xs4>
+                <v-text-field
+                  :value="check['info']"
+                  class="mt-0 pt-0"
+                  type="number"
+                  label="คะแนน"
+                  outline
+                  placeholder="0.00"
+                  @change="v => updateData('score', 'info', v)"
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs4>
+                <v-checkbox
+                  :value="check.mark['info']"
+                  label="MARK THIS"
+                  @change="v => updateData('mark', 'info', v)"
+                ></v-checkbox>
+              </v-flex>
+              <v-flex xs4>
+                <v-text-field
+                  :value="check.comment['info']"
+                  label="Comment"
+                  @change="v => updateData('comment', 'info', v)"
+                ></v-text-field>
+              </v-flex>
+            </v-layout>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+
       <v-flex v-for="qus in questions" :key="qus.item" xs12>
         <v-card :dark="check.mark[qus.item]">
           <v-card-text>
             <div class="my-3">
               <p v-if="typeof qus.text === 'string'">{{ qus.text }}</p>
               <p v-else>
-                <template v-for="sub in qus.text"
-                  >{{ sub }}<br :key="sub"
+                <template v-for="(sub, index) in qus.text"
+                  >{{ sub }}<br :key="`${qus.item}-qus-${index}`"
                 /></template>
               </p>
               <v-img
@@ -70,7 +104,7 @@
             >
               <v-textarea
                 v-for="subQ in qus.key2a"
-                :key="subQ.key"
+                :key="`${qus.item}-${subQ.key}`"
                 v-model="form[qus.key1][subQ.key]"
                 rows="3"
                 :label="subQ.text"
@@ -174,13 +208,13 @@ export default {
             แต่ก่อนที่สมบัติจะบอกคำตอบแก่ทั้งสอง สมบัติได้ให้ตัวเลือกวันเกิดมาทั้งหมดสิบข้อ`,
             ``,
             `2 มกราคม / 3 มกราคม / 6 มกราคม / 4 กุมภาพันธ์ / 5 กุมภาพันธ์ / 1 มีนาคม / 3 มีนาคม / 1 เมษายน / 2 เมษายน / 4 เมษายน`,
-            ` `,
+            ``,
             `จากนั้นสมบัติจึงบอกวันแก่สมหญิง และเดือนแก่สมชาย เสร็จแล้วทั้งสมชาย และสมหญิงเริ่มจึงคุยกัน`,
-            `  `,
+            ``,
             `สมชาย : เราไม่รู้ว่าวันเกิดของสมบัติอะ แต่เรารู้ว่าสมหญิงก็ไม่รู้เหมือนกัน`,
             `สมหญิง : ตอนแรกก็ไม่รู้นะว่าวันเกิดของสมบัติคือวันไหน แต่ตอนนี้รู้ละ`,
             `สมชาย : อ่าวหรอ งั้นตอนนี้เราก็รู้ละว่าวันเกิดสมบัติคือวันอะไร`,
-            `   `,
+            ``,
             `จงหาวันเกิดของสมบัติพร้อมแสดงวิธีการหา`
           ],
           key1: "logic",
