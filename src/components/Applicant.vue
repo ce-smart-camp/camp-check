@@ -44,7 +44,7 @@
               >
                 {{ props.item.id }}
               </td>
-              <td class="text-xs-left">{{ props.item.info.pic ? "Y" : "" }}</td>
+              <td class="text-xs-left">{{ props.item.score.info }}</td>
               <td class="text-xs-left">{{ props.item.info.name }}</td>
               <td class="text-xs-left">{{ props.item.info.surname }}</td>
               <td class="text-xs-left">{{ props.item.info.nickname }}</td>
@@ -89,7 +89,7 @@ export default {
       ],
       headers: [
         { text: "ID", value: "id" },
-        { text: "Pic", value: "info.pic" },
+        { text: "score", value: "score.info" },
         { text: "Name", value: "info.name" },
         { text: "Surname", value: "info.surname" },
         { text: "Nickname", value: "info.nickname" },
@@ -141,7 +141,7 @@ export default {
     }
   },
   beforeRouteEnter(to, from, next) {
-    if (to.path === "/a" && from.path === "/")
+    if (from.path === "/")
       Store.commit("setPagination", { sortBy: "created_at" });
     next();
   }

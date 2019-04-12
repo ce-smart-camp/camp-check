@@ -183,7 +183,7 @@ export default {
     }
   },
   beforeRouteEnter(to, from, next) {
-    if (to.path === "/q" && from.path === "/")
+    if (from.path === "/")
       Store.commit("setPagination", { sortBy: "completed_at" });
     next();
   }

@@ -63,9 +63,9 @@
                   <v-icon small class="mr-2 pl-2">insert_comment</v-icon>
                 </v-btn>
               </td>
-              <td class="text-xs-left">{{ props.item.score.sum }}</td>
-              <td>
-                <v-btn
+              <td class="text-xs-left">
+                {{ props.item.score.info
+                }}<v-btn
                   flat
                   icon
                   color="indigo"
@@ -74,6 +74,7 @@
                   <v-icon small class="mr-2 pl-2">insert_comment</v-icon>
                 </v-btn>
               </td>
+              <td class="text-xs-left">{{ props.item.score.all }}</td>
             </template>
           </v-data-table>
         </v-card>
@@ -103,8 +104,8 @@ export default {
         { text: "Gender", value: "info.gender" },
         { text: "Q1", align: "center", value: "score.q1" },
         { text: "Q2", align: "center", value: "score.q2" },
-        { text: "SUM", align: "center", value: "score.sum" },
-        { text: "info", align: "center", value: "info", sortable: false }
+        { text: "info", align: "center", value: "score.info" },
+        { text: "all", align: "center", value: "score.all" }
       ]
     };
   },
@@ -122,9 +123,9 @@ export default {
     }
   },
   beforeRouteEnter(to, from, next) {
-    if (to.path === "/s" && from.path === "/")
+    if (from.path === "/")
       Store.commit("setPagination", {
-        sortBy: "score.sum",
+        sortBy: "score.all",
         descending: true
       });
     next();
