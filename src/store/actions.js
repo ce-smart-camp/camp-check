@@ -1,6 +1,7 @@
-import firebase from "./../core/firebase";
-import db from "./../core/db";
 import "./../core/auth";
+
+import db from "./../core/db";
+import firebase from "./../core/firebase";
 
 export const init = ({ commit, dispatch, state }) => {
   if (!state.is.initAuth) {
@@ -107,7 +108,7 @@ export const setupDB = ({ commit, state }) => {
             commit("editData", { key: key, val: val });
           }
           if (change.type === "removed") {
-            console.log("Removed " + key + ": ", change.doc.data());
+            // console.log("Removed " + key + ": ", change.doc.data());
           }
         });
       });

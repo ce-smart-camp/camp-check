@@ -128,16 +128,11 @@ export default {
         }
       });
 
-      batch
-        .commit()
-        .then(function() {
-          console.log("finish write");
-        })
-        .catch(err => {
-          if (err.code === "permission-denied")
-            alert("บอกผ่ายเว็บด้วย ถ้าหน้าต่างนี้แสดง");
-          else throw err;
-        });
+      batch.commit().catch(err => {
+        if (err.code === "permission-denied")
+          alert("บอกผ่ายเว็บด้วย ถ้าหน้าต่างนี้แสดง");
+        else throw err;
+      });
     }
   },
   beforeRouteEnter(to, from, next) {
