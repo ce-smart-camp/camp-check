@@ -41,7 +41,7 @@
               <td class="text-xs-left">{{ props.item.info.surname }}</td>
               <td class="text-xs-left">{{ props.item.info.nickname }}</td>
               <td class="text-xs-left">{{ props.item.info.gender }}</td>
-              <td class="text-xs-left">
+              <td class="text-xs-left" style="white-space: nowrap;">
                 {{ props.item.score.q1
                 }}<v-btn
                   flat
@@ -52,7 +52,7 @@
                   <v-icon small class="mr-2 pl-2">insert_comment</v-icon>
                 </v-btn>
               </td>
-              <td class="text-xs-left">
+              <td class="text-xs-left" style="white-space: nowrap;">
                 {{ props.item.score.q2
                 }}<v-btn
                   flat
@@ -63,7 +63,7 @@
                   <v-icon small class="mr-2 pl-2">insert_comment</v-icon>
                 </v-btn>
               </td>
-              <td class="text-xs-left">
+              <td class="text-xs-left" style="white-space: nowrap;">
                 {{ props.item.score.info
                 }}<v-btn
                   flat
