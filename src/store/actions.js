@@ -1,6 +1,7 @@
-import firebase from "./../core/firebase";
-import db from "./../core/db";
 import "./../core/auth";
+
+import db from "./../core/db";
+import firebase from "./../core/firebase";
 
 export const init = ({ commit, dispatch, state }) => {
   if (!state.is.initAuth) {
@@ -31,8 +32,8 @@ let prepareRegData = (doc, Key, state, commit) => {
       data[key] = data[key].seconds * 1000 + data[key].nanoseconds / 1000000;
   });
   if (Key == "reg") {
-    data.score = { q1: 0, q2: 0, info: 0, sum: 0 };
-    data.mark = { q1: 0, q2: 0, info: 0, sum: 0 };
+    data.score = { q1: 0, q2: 0, info: 0, sum: 0, all: 0 };
+    data.mark = { q1: 0, q2: 0, info: 0, sum: 0, all: 0 };
   } else if (Key == "qus") {
     data.do = {};
 
@@ -49,8 +50,8 @@ let prepareRegData = (doc, Key, state, commit) => {
         for (let key2 in data[key]) cou += data[key][key2] == null ? 0 : 1;
     });
     data.do.q2 = cou;
-    data.score = { q1: 0, q2: 0, info: 0, sum: 0 };
-    data.mark = { q1: 0, q2: 0, info: 0, sum: 0 };
+    data.score = { q1: 0, q2: 0, info: 0, sum: 0, all: 0 };
+    data.mark = { q1: 0, q2: 0, info: 0, sum: 0, all: 0 };
 
     // มีคะแนนอยู่ แล้ว น้องส่งคำตอบ ----- ไม่น่าเกิดขึ้น
     // if (state.key.check.hasOwnProperty(data.id)) {
@@ -107,7 +108,7 @@ export const setupDB = ({ commit, state }) => {
             commit("editData", { key: key, val: val });
           }
           if (change.type === "removed") {
-            console.log("Removed " + key + ": ", change.doc.data());
+            // console.log("Removed " + key + ": ", change.doc.data());
           }
         });
       });

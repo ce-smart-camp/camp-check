@@ -14,6 +14,35 @@
         </v-card>
       </v-flex>
 
+      <v-flex xs12>
+        <v-card>
+          <v-card-title primary-title>
+            <h3>คำค้นหา</h3>
+          </v-card-title>
+          <v-card-text>
+            <div>
+              <p>
+                <kbd>M</kbd> => การมาร์คทุกอย่าง<br />
+                <kbd>Mi</kbd> => มาร์ครายคน<br />
+                <kbd>Mq</kbd> => มาร์คคำถาม<br />
+                <kbd>Mq1</kbd> => คำถามชุด 1 , <kbd>Mq2</kbd> => คำถามชุด 2<br />
+                <kbd>Mq1-4</kbd> => คำถามชุด 1 ข้อ 4 , <kbd>Mq2-11</kbd> =>
+                คำถามชุด 2 ข้อ 11
+              </p>
+              <p>
+                การค้นหาจะคล้ายกับการมาร์ค แต่จะใช้ <kbd>C</kbd> แทน<br />
+                <kbd>C</kbd> => ที่ใส่ comment ทั้งหมด<br />
+                จะใช้ <kbd>|</kbd> ในการคั่นระหว่างจุดที่ค้นหากับคำค้นหา<br />
+                <kbd>C|ไม่</kbd> => หาคำว่า <code>ไม่</code> ที่อยู่ใน comment
+                ทั้งหมด<br />
+                <kbd>Cq2-1|ใช่</kbd> => หาคำว่า <code>ใช่</code> ที่อยู่ใน
+                comment คำถามชุด 2 ข้อ 1
+              </p>
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+
       <v-flex>
         <v-card>
           <v-card-title>
@@ -33,19 +62,23 @@
             :rows-per-page-items="rowsPerPageItems"
             :search="search"
             :pagination.sync="pagination"
+            :custom-filter="filter"
             class="elevation-1"
           >
             <template v-slot:items="props">
-              <td class="text-xs-left">{{ props.item.idNum + 1 }}</td>
+              <td
+                class="text-xs-left"
+                :style="
+                  props.item.mark.info == 1 ? 'background-color: silver;' : ''
+                "
+              >
+                {{ props.item.idNum + 1 }}
+              </td>
               <td class="text-xs-right">{{ props.item.score.q1 }}</td>
               <td class="text-xs-right">{{ props.item.score.q2 }}</td>
               <td class="text-xs-right">{{ props.item.score.sum }}</td>
               <td class="text-xs-left">
-                {{
-                  props.item.completed_at
-                    ? new Date(props.item.completed_at).toLocaleString()
-                    : ""
-                }}
+                {{ new Date(props.item.completed_at).toLocaleString() }}
               </td>
               <td class="text-xs-right">
                 {{ props.item.mark.q1 }} /
@@ -116,8 +149,41 @@ export default {
       }
     }
   },
+  methods: {
+    filter(items, search) {
+      search = search.toString();
+      if (search.trim() === "") return items;
+
+      return items.filter(item => {
+        const Key = { C: "comment", M: "mark" };
+        const type = Key[search.charAt(0)];
+        if (typeof type !== "undefined") {
+          const index = this.$store.state.key.check[item.id];
+          if (typeof index !== "undefined") {
+            const sub = search
+              .substr(1)
+              .toLowerCase()
+              .split("|");
+            const data = this.$store.state.list.check[index][type];
+            return Object.keys(data).some(
+              key =>
+                key.indexOf(sub[0].trim()) !== -1 &&
+                data[key] !== null &&
+                data[key] !== "" &&
+                (typeof sub[1] !== "undefined"
+                  ? data[key]
+                      .toString()
+                      .toLowerCase()
+                      .indexOf(sub[1].trim()) !== -1
+                  : true)
+            );
+          } else return false;
+        }
+      });
+    }
+  },
   beforeRouteEnter(to, from, next) {
-    if (to.path === "/q" && from.path === "/")
+    if (from.path === "/")
       Store.commit("setPagination", { sortBy: "completed_at" });
     next();
   }

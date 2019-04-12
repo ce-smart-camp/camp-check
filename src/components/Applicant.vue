@@ -36,8 +36,15 @@
             class="elevation-1"
           >
             <template v-slot:items="props">
-              <td class="text-xs-left">{{ props.item.id }}</td>
-              <td class="text-xs-left">{{ props.item.info.pic ? "Y" : "" }}</td>
+              <td
+                class="text-xs-left"
+                :style="
+                  props.item.mark.info == 1 ? 'background-color: silver;' : ''
+                "
+              >
+                {{ props.item.id }}
+              </td>
+              <td class="text-xs-left">{{ props.item.score.info }}</td>
               <td class="text-xs-left">{{ props.item.info.name }}</td>
               <td class="text-xs-left">{{ props.item.info.surname }}</td>
               <td class="text-xs-left">{{ props.item.info.nickname }}</td>
@@ -82,7 +89,7 @@ export default {
       ],
       headers: [
         { text: "ID", value: "id" },
-        { text: "Pic", value: "info.pic" },
+        { text: "score", value: "score.info" },
         { text: "Name", value: "info.name" },
         { text: "Surname", value: "info.surname" },
         { text: "Nickname", value: "info.nickname" },
@@ -121,20 +128,15 @@ export default {
         }
       });
 
-      batch
-        .commit()
-        .then(function() {
-          console.log("finish write");
-        })
-        .catch(err => {
-          if (err.code === "permission-denied")
-            alert("บอกผ่ายเว็บด้วย ถ้าหน้าต่างนี้แสดง");
-          else throw err;
-        });
+      batch.commit().catch(err => {
+        if (err.code === "permission-denied")
+          alert("บอกผ่ายเว็บด้วย ถ้าหน้าต่างนี้แสดง");
+        else throw err;
+      });
     }
   },
   beforeRouteEnter(to, from, next) {
-    if (to.path === "/a" && from.path === "/")
+    if (from.path === "/")
       Store.commit("setPagination", { sortBy: "created_at" });
     next();
   }

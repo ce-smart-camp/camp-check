@@ -1,5 +1,6 @@
-import firebase from "./firebase";
 import "firebase/firestore";
+
+import firebase from "./firebase";
 
 firebase
   .firestore()
@@ -14,7 +15,7 @@ firebase
       // features required to enable persistence
       // ...
     }
-    console.error(err);
+    // console.error(err);
   });
 
 var db = firebase.firestore();

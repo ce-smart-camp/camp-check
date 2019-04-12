@@ -28,8 +28,12 @@ export const setPagination = (state, data) => {
 export const setScore = (state, data) => {
   const score = data.sum;
   score.sum = score.q1 + score.q2;
+  score.all = score.sum + score.info;
+
   const mark = data.mark.sum;
   mark.sum = mark.q1 + mark.q2;
+  mark.all = mark.sum + mark.info;
+
   if (state.key.qus.hasOwnProperty(data.id)) {
     Object.assign(state.list.qus[state.key.qus[data.id]], { score, mark });
   }
