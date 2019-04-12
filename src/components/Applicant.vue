@@ -36,7 +36,14 @@
             class="elevation-1"
           >
             <template v-slot:items="props">
-              <td class="text-xs-left">{{ props.item.id }}</td>
+              <td
+                class="text-xs-left"
+                :style="
+                  props.item.mark.info == 1 ? 'background-color: silver;' : ''
+                "
+              >
+                {{ props.item.id }}
+              </td>
               <td class="text-xs-left">{{ props.item.info.pic ? "Y" : "" }}</td>
               <td class="text-xs-left">{{ props.item.info.name }}</td>
               <td class="text-xs-left">{{ props.item.info.surname }}</td>

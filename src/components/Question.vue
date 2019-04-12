@@ -36,16 +36,19 @@
             class="elevation-1"
           >
             <template v-slot:items="props">
-              <td class="text-xs-left">{{ props.item.idNum + 1 }}</td>
+              <td
+                class="text-xs-left"
+                :style="
+                  props.item.mark.info == 1 ? 'background-color: silver;' : ''
+                "
+              >
+                {{ props.item.idNum + 1 }}
+              </td>
               <td class="text-xs-right">{{ props.item.score.q1 }}</td>
               <td class="text-xs-right">{{ props.item.score.q2 }}</td>
               <td class="text-xs-right">{{ props.item.score.sum }}</td>
               <td class="text-xs-left">
-                {{
-                  props.item.completed_at
-                    ? new Date(props.item.completed_at).toLocaleString()
-                    : ""
-                }}
+                {{ new Date(props.item.completed_at).toLocaleString() }}
               </td>
               <td class="text-xs-right">
                 {{ props.item.mark.q1 }} /
