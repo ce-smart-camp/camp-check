@@ -2,16 +2,21 @@
   <v-container grid-list-xl>
     <v-layout v-if="form" wrap>
       <v-flex xs12>
-        <v-card>
+        <v-card :dark="check.mark['info']">
           <v-card-title primary-title>
-            <h3 class="headline mb-0">ตรวจคำตอบ คำถาม Part 1</h3>
+            <h3 class="headline mb-0">ตรวจคำตอบ คำถาม</h3>
+            <h1>Part 1</h1>
             <v-spacer />
             <h2>
               MARK :
               {{
                 check.mark ? (check.mark.sum ? check.mark.sum.q1 || 0 : 0) : 0
               }}
-              || คะแนน : {{ check.sum ? check.sum.q1 || 0 : 0 }} || รวม :
+              /
+              {{
+                check.mark ? (check.mark.sum ? check.mark.sum.sum || 0 : 0) : 0
+              }}
+              || คะแนน : {{ check.sum ? check.sum.q1 || 0 : 0 }} /
               {{ check.sum ? check.sum.sum || 0 : 0 }}
             </h2>
           </v-card-title>
@@ -33,40 +38,38 @@
               total-visible="10"
             ></v-pagination>
           </v-card-text>
-        </v-card>
-      </v-flex>
-
-      <v-flex xs12>
-        <v-card :dark="check.mark['info']">
-          <v-card-text>
-            <v-layout>
-              <v-flex xs4>
-                <v-text-field
-                  :value="check['info']"
-                  class="mt-0 pt-0"
-                  type="number"
-                  label="คะแนน"
-                  outline
-                  placeholder="0.00"
-                  @change="v => updateData('score', 'info', v)"
-                ></v-text-field>
-              </v-flex>
-              <v-flex xs4>
-                <v-checkbox
-                  :value="check.mark['info']"
-                  label="MARK THIS"
-                  @change="v => updateData('mark', 'info', v)"
-                ></v-checkbox>
-              </v-flex>
-              <v-flex xs4>
-                <v-text-field
-                  :value="check.comment['info']"
-                  label="Comment"
-                  @change="v => updateData('comment', 'info', v)"
-                ></v-text-field>
-              </v-flex>
-            </v-layout>
-          </v-card-text>
+          <v-toolbar>
+            <v-text-field
+              :value="check['info']"
+              type="number"
+              single-line
+              hide-details
+              placeholder="คะแนน"
+              style="max-width: 70px;"
+              class="pt-0"
+              @change="v => updateData('score', 'info', v)"
+            ></v-text-field>
+            <v-divider class="mx-3" vertical />
+            <v-text-field
+              :value="check.comment['info']"
+              single-line
+              hide-details
+              placeholder="Comment"
+              class="pt-0"
+              @change="v => updateData('comment', 'info', v)"
+            ></v-text-field>
+            <v-divider class="mx-3" vertical />
+            <v-btn-toggle
+              :value="check.mark['info']"
+              label="MARK THIS"
+              class="transparent"
+              @change="v => updateData('mark', 'info', v)"
+            >
+              <v-btn :value="true" flat>
+                <v-icon>star</v-icon>
+              </v-btn>
+            </v-btn-toggle>
+          </v-toolbar>
         </v-card>
       </v-flex>
 
@@ -88,45 +91,51 @@
                 :name="qus.item"
                 rows="5"
                 single-line
+                hide-details
                 readonly
                 box
                 auto-grow
               />
             </transition>
-
-            <v-layout>
-              <v-flex xs4>
-                <v-text-field
-                  :value="check[qus.item]"
-                  class="mt-0 pt-0"
-                  type="number"
-                  label="คะแนน"
-                  outline
-                  placeholder="0.00"
-                  @change="v => updateData('score', qus.item, v)"
-                ></v-text-field>
-              </v-flex>
-              <v-flex xs4>
-                <v-checkbox
-                  :value="check.mark[qus.item]"
-                  label="MARK THIS"
-                  @change="v => updateData('mark', qus.item, v)"
-                ></v-checkbox>
-              </v-flex>
-              <v-flex xs4>
-                <v-text-field
-                  :value="check.comment[qus.item]"
-                  label="Comment"
-                  @change="v => updateData('comment', qus.item, v)"
-                ></v-text-field>
-              </v-flex>
-            </v-layout>
           </v-card-text>
+
+          <v-toolbar>
+            <v-text-field
+              :value="check[qus.item]"
+              type="number"
+              single-line
+              hide-details
+              placeholder="คะแนน"
+              style="max-width: 70px;"
+              class="pt-0"
+              @change="v => updateData('score', qus.item, v)"
+            ></v-text-field>
+            <v-divider class="mx-3" vertical />
+            <v-text-field
+              :value="check.comment[qus.item]"
+              single-line
+              hide-details
+              placeholder="Comment"
+              class="pt-0"
+              @change="v => updateData('comment', qus.item, v)"
+            ></v-text-field>
+            <v-divider class="mx-3" vertical />
+            <v-btn-toggle
+              :value="check.mark[qus.item]"
+              label="MARK THIS"
+              class="transparent"
+              @change="v => updateData('mark', qus.item, v)"
+            >
+              <v-btn :value="true" flat>
+                <v-icon>star</v-icon>
+              </v-btn>
+            </v-btn-toggle>
+          </v-toolbar>
         </v-card>
       </v-flex>
 
       <v-flex>
-        <v-card>
+        <v-card :dark="check.mark['info']">
           <v-card-text class="text-xs-center">
             <v-pagination
               v-model="page"
@@ -250,6 +259,7 @@ export default {
   },
   methods: {
     updateData(Key, key, value) {
+      if (typeof value === "undefined") value = null;
       var data = {};
       if (Key !== "score") {
         data[Key] = {};
