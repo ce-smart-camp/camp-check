@@ -161,10 +161,10 @@ export default {
       search = search.toString();
       if (search.trim() === "") return items;
 
-      return items.filter(item => {
-        const Key = { C: "comment", M: "mark" };
-        const type = Key[search.charAt(0)];
-        if (typeof type !== "undefined") {
+      const Key = { C: "comment", M: "mark" };
+      const type = Key[search.charAt(0)];
+      if (typeof type !== "undefined") {
+        return items.filter(item => {
           const index = this.$store.state.key.check[item.id];
           if (typeof index !== "undefined") {
             const sub = search
@@ -186,9 +186,12 @@ export default {
                       .indexOf(sub[1].trim()) !== -1
                   : true)
             );
-          } else return false;
-        }
-      });
+          }
+          return false;
+        });
+      }
+
+      return [];
     }
   },
   beforeRouteEnter(to, from, next) {
