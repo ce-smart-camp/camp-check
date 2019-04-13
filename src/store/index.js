@@ -27,7 +27,8 @@ const state = {
     qus: [],
     check: []
   },
-  pagination: {}
+  pagination: {},
+  search: null
 };
 
 const store = new Vuex.Store({

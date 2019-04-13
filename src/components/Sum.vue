@@ -102,7 +102,6 @@ import XLSX from "xlsx";
 export default {
   data() {
     return {
-      search: null,
       rowsPerPageItems: [
         50,
         100,
@@ -133,6 +132,14 @@ export default {
       },
       set(value) {
         this.$store.commit("setPagination", value);
+      }
+    },
+    search: {
+      get() {
+        return this.$store.state.search;
+      },
+      set(value) {
+        this.$store.commit("setSearch", value);
       }
     }
   },
@@ -229,11 +236,13 @@ export default {
     }
   },
   beforeRouteEnter(to, from, next) {
-    if (from.path === "/")
+    if (from.path === "/") {
       Store.commit("setPagination", {
         sortBy: "score.all",
         descending: true
       });
+      Store.commit("setSearch", null);
+    }
     next();
   }
 };

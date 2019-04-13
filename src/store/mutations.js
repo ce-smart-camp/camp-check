@@ -25,6 +25,10 @@ export const setPagination = (state, data) => {
   state.pagination = data;
 };
 
+export const setSearch = (state, data) => {
+  state.search = data;
+};
+
 export const setScore = (state, data) => {
   const score = data.sum;
   score.sum = score.q1 + score.q2;
