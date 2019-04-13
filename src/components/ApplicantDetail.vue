@@ -2,13 +2,13 @@
   <v-container grid-list-xl>
     <v-layout v-if="reg" wrap>
       <v-flex xs12>
-        <v-card>
+        <v-card :dark="check.mark['info']">
           <v-card-title primary-title>
             <h3 class="headline mb-0">ข้อมูลส่วนตัว</h3>
             <v-spacer />
             <h2>
-              คะแนน : {{ check.sum ? check.sum.q2 || 0 : 0 }} || รวม :
-              {{ check.sum ? check.sum.sum || 0 : 0 }}
+              คะแนน : {{ check.sum ? check.sum.info || 0 : 0 }} || รวม :
+              {{ check.sum ? check.sum.all || 0 : 0 }}
             </h2>
           </v-card-title>
           <v-card-actions>
@@ -23,40 +23,39 @@
               total-visible="10"
             ></v-pagination>
           </v-card-text>
-        </v-card>
-      </v-flex>
 
-      <v-flex xs12>
-        <v-card :dark="check.mark['info']">
-          <v-card-text>
-            <v-layout>
-              <v-flex xs4>
-                <v-text-field
-                  :value="check['info']"
-                  class="mt-0 pt-0"
-                  type="number"
-                  label="คะแนน"
-                  outline
-                  placeholder="0.00"
-                  @change="v => updateData('score', 'info', v)"
-                ></v-text-field>
-              </v-flex>
-              <v-flex xs4>
-                <v-checkbox
-                  :value="check.mark['info']"
-                  label="MARK THIS"
-                  @change="v => updateData('mark', 'info', v)"
-                ></v-checkbox>
-              </v-flex>
-              <v-flex xs4>
-                <v-text-field
-                  :value="check.comment['info']"
-                  label="Comment"
-                  @change="v => updateData('comment', 'info', v)"
-                ></v-text-field>
-              </v-flex>
-            </v-layout>
-          </v-card-text>
+          <v-toolbar>
+            <v-text-field
+              :value="check['info']"
+              type="number"
+              single-line
+              hide-details
+              placeholder="คะแนน"
+              style="max-width: 70px;"
+              class="pt-0"
+              @change="v => updateData('score', 'info', v)"
+            ></v-text-field>
+            <v-divider class="mx-3" vertical />
+            <v-text-field
+              :value="check.comment['info']"
+              single-line
+              hide-details
+              placeholder="Comment"
+              class="pt-0"
+              @change="v => updateData('comment', 'info', v)"
+            ></v-text-field>
+            <v-divider class="mx-3" vertical />
+            <v-btn-toggle
+              :value="check.mark['info']"
+              label="MARK THIS"
+              class="transparent"
+              @change="v => updateData('mark', 'info', v)"
+            >
+              <v-btn :value="true" flat>
+                <v-icon>star</v-icon>
+              </v-btn>
+            </v-btn-toggle>
+          </v-toolbar>
         </v-card>
       </v-flex>
 
@@ -168,6 +167,7 @@ export default {
   },
   methods: {
     updateData(Key, key, value) {
+      if (typeof value === "undefined") value = null;
       var data = {};
       if (Key !== "score") {
         data[Key] = {};
