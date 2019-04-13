@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar>
+  <v-toolbar dense>
     <v-text-field
       :value="score"
       type="number"
