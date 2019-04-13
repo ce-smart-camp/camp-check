@@ -120,13 +120,13 @@
 </template>
 
 <script>
-import CamperInfo from "./../view/camper_info";
-import CamperContact from "./../view/camper_contact";
-import CamperHealth from "./../view/camper_health";
-import CamperAddress from "./../view/camper_address";
-import CamperEdu from "./../view/camper_edu";
-import CamperParent from "./../view/camper_parent";
-import CamperPass from "./../view/camper_pass";
+import CamperInfo from "./../components/camper_info";
+import CamperContact from "./../components/camper_contact";
+import CamperHealth from "./../components/camper_health";
+import CamperAddress from "./../components/camper_address";
+import CamperEdu from "./../components/camper_edu";
+import CamperParent from "./../components/camper_parent";
+import CamperPass from "./../components/camper_pass";
 
 import db from "./../core/db";
 
