@@ -99,13 +99,9 @@ export const setupDB = ({ commit, state }) => {
       }
       unsubscribe = unsubscribe.onSnapshot(function(snapshot) {
         snapshot.docChanges().forEach(function(change) {
-          if (change.type === "added") {
+          if (change.type === "added" || change.type === "modified") {
             let val = prepareRegData(change.doc, key, state, commit);
-            commit("addData", { key: key, val: val });
-          }
-          if (change.type === "modified") {
-            let val = prepareRegData(change.doc, key, state, commit);
-            commit("editData", { key: key, val: val });
+            commit("changeData", { key: key, val: val });
           }
           if (change.type === "removed") {
             // console.log("Removed " + key + ": ", change.doc.data());
@@ -116,5 +112,15 @@ export const setupDB = ({ commit, state }) => {
     });
 
     commit("setIs", { key: "setupDB", val: true });
+  }
+};
+
+export const checkStoreCheck = ({ commit, getters }, id) => {
+  var check = getters.getByID("check", id);
+  if (typeof check === "undefined") {
+    commit("changeData", {
+      key: "check",
+      val: { mark: {}, comment: {}, id: id }
+    });
   }
 };

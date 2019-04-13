@@ -1,11 +1,13 @@
-export const addData = (state, data) => {
-  data.val.idNum = state.list[data.key].length;
-  state.key[data.key][data.val.id] = state.list[data.key].length;
-  state.list[data.key].push(data.val);
-};
+export const changeData = (state, data) => {
+  const index = state.key[data.key][data.val.id];
 
-export const editData = (state, data) => {
-  state.list[data.key][state.key[data.key][data.val.id]] = data.val;
+  if (typeof index === "undefined") {
+    data.val.idNum = state.list[data.key].length;
+    state.key[data.key][data.val.id] = state.list[data.key].length;
+    state.list[data.key].push(data.val);
+  } else {
+    Object.assign(state.list[data.key][index], data.val);
+  }
 };
 
 export const resetData = (state, data) => {

@@ -24,38 +24,7 @@
             ></v-pagination>
           </v-card-text>
 
-          <v-toolbar>
-            <v-text-field
-              :value="check['info']"
-              type="number"
-              single-line
-              hide-details
-              placeholder="คะแนน"
-              style="max-width: 70px;"
-              class="pt-0"
-              @change="v => updateData('score', 'info', v)"
-            ></v-text-field>
-            <v-divider class="mx-3" vertical />
-            <v-text-field
-              :value="check.comment['info']"
-              single-line
-              hide-details
-              placeholder="Comment"
-              class="pt-0"
-              @change="v => updateData('comment', 'info', v)"
-            ></v-text-field>
-            <v-divider class="mx-3" vertical />
-            <v-btn-toggle
-              :value="check.mark['info']"
-              label="MARK THIS"
-              class="transparent"
-              @change="v => updateData('mark', 'info', v)"
-            >
-              <v-btn :value="true" flat>
-                <v-icon>star</v-icon>
-              </v-btn>
-            </v-btn-toggle>
-          </v-toolbar>
+          <ScoreToolbar :id="id" field="info" />
         </v-card>
       </v-flex>
 
@@ -128,7 +97,7 @@ import CamperEdu from "./../components/camper_edu";
 import CamperParent from "./../components/camper_parent";
 import CamperPass from "./../components/camper_pass";
 
-import db from "./../core/db";
+import ScoreToolbar from "./../components/ScoreToolbar";
 
 export default {
   components: {
@@ -138,21 +107,26 @@ export default {
     CamperAddress,
     CamperEdu,
     CamperParent,
-    CamperPass
-  },
-  data() {
-    return {
-      check: { mark: {}, comment: {} },
-      storeUnsub: null
-    };
+    CamperPass,
+    ScoreToolbar
   },
   computed: {
+    id() {
+      return this.$route.params.id;
+    },
+    check() {
+      this.$store.dispatch("checkStoreCheck", this.id);
+      return this.$store.getters.getByID("check", this.id);
+    },
+    score() {
+      return this.check[this.field];
+    },
     reg() {
-      return this.$store.getters.getByID("reg", this.$route.params.id);
+      return this.$store.getters.getByID("reg", this.id);
     },
     page: {
       get() {
-        return Number(this.$store.state.key.reg[this.$route.params.id]) + 1;
+        return Number(this.$store.state.key.reg[this.id]) + 1;
       },
       set(value) {
         this.$router.replace({
@@ -161,55 +135,6 @@ export default {
         }); // !!router name
       }
     }
-  },
-  mounted() {
-    this.setupCheck();
-  },
-  methods: {
-    updateData(Key, key, value) {
-      if (typeof value === "undefined") value = null;
-      var data = {};
-      if (Key !== "score") {
-        data[Key] = {};
-        data[Key][key] = value;
-      } else {
-        data[key] = Number(value);
-      }
-      db.collection("check")
-        .doc(this.$route.params.id)
-        .set(data, { merge: true });
-    },
-    setupCheck() {
-      if (this.storeUnsub !== null) this.storeUnsub();
-
-      this.check = this.$store.getters.getByID(
-        "check",
-        this.$route.params.id
-      ) || {
-        comment: {},
-        mark: {},
-        sum: {}
-      };
-
-      this.storeUnsub = this.$store.subscribe(mutation => {
-        if (mutation.type === "editData" || mutation.type === "addData") {
-          if (
-            mutation.payload.key === "check" &&
-            mutation.payload.val.id === this.$route.params.id
-          ) {
-            this.check = mutation.payload.val;
-          }
-        }
-      });
-    }
-  },
-  beforeRouteUpdate(to, from, next) {
-    next();
-    this.setupCheck();
-  },
-  beforeRouteLeave(to, from, next) {
-    if (this.storeUnsub !== null) this.storeUnsub();
-    next();
   }
 };
 </script>
