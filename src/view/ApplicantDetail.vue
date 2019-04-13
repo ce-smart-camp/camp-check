@@ -118,9 +118,6 @@ export default {
       this.$store.dispatch("checkStoreCheck", this.id);
       return this.$store.getters.getByID("check", this.id);
     },
-    score() {
-      return this.check[this.field];
-    },
     reg() {
       return this.$store.getters.getByID("reg", this.id);
     },
