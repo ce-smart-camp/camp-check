@@ -174,8 +174,10 @@ export default {
             const data = this.$store.state.list.check[index][type];
             return Object.keys(data).some(
               key =>
+                key !== "sum" &&
                 key.indexOf(sub[0].trim()) !== -1 &&
                 data[key] !== null &&
+                data[key] !== false &&
                 data[key] !== "" &&
                 (typeof sub[1] !== "undefined"
                   ? data[key]
