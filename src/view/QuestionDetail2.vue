@@ -272,6 +272,10 @@ export default {
         this.$router.replace({ name: "qid2", params: { idNum: value - 1 } }); // !!router name
       }
     }
+  },
+  created() {
+    this.$store.dispatch("init", "check");
+    this.$store.dispatch("init", "qus");
   }
 };
 </script>

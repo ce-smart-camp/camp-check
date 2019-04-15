@@ -132,6 +132,10 @@ export default {
         }); // !!router name
       }
     }
+  },
+  created() {
+    this.$store.dispatch("init", "check");
+    this.$store.dispatch("init", "reg");
   }
 };
 </script>

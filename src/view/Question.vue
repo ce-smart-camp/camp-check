@@ -156,6 +156,10 @@ export default {
       }
     }
   },
+  created() {
+    this.$store.dispatch("init", "check");
+    this.$store.dispatch("init", "qus");
+  },
   methods: {
     filter(items, search) {
       search = search.toString();

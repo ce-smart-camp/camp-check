@@ -123,6 +123,10 @@ export default {
       }
     }
   },
+  created() {
+    this.$store.dispatch("init", "check");
+    this.$store.dispatch("init", "reg");
+  },
   methods: {
     recheck() {
       var batch = db.batch();

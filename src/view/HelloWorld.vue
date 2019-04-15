@@ -38,6 +38,16 @@ export default {
     firebase.auth().onAuthStateChanged(user => {
       this.isLogin = !!user;
       this.changeText();
+
+      this.$store.commit("setIs", { key: "login", val: this.isLogin });
+      if (!user) {
+        ["reg", "qus", "check"].forEach(key => {
+          if (this.$store.state.snapshot[key] !== null)
+            this.$store.state.snapshot[key]();
+          this.$store.commit("setSnapshot", { key: key, val: null });
+          this.$store.commit("resetData", key);
+        });
+      }
     });
   },
   methods: {

@@ -143,6 +143,10 @@ export default {
       }
     }
   },
+  created() {
+    this.$store.dispatch("init", "check");
+    this.$store.dispatch("init", "reg");
+  },
   methods: {
     // credit: https://github.com/vuetifyjs/vuetify/blob/master/packages/vuetify/src/mixins/data-iterable.js
     customSort(items, index, isDescending) {
