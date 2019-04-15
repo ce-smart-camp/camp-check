@@ -46,7 +46,7 @@
       <v-flex v-for="qus in questions" :key="qus.item" xs12>
         <v-card :dark="check.mark[qus.item]">
           <v-card-text>
-            <div class="my-3">
+            <div class="mb-3">
               <p v-if="typeof qus.text === 'string'">{{ qus.text }}</p>
               <p v-else>
                 <template v-for="(sub, index) in qus.text"
@@ -66,7 +66,6 @@
                 :key="form[qus.key1][qus.key2]"
                 v-model="form[qus.key1][qus.key2]"
                 :filename="qus.imgUp"
-                class="pb-4"
               />
             </transition>
             <transition-group
@@ -76,14 +75,16 @@
               tag="div"
             >
               <v-textarea
-                v-for="subQ in qus.key2a"
+                v-for="(subQ, index) in qus.key2a"
                 :key="`${qus.item}-${subQ.key}`"
                 v-model="form[qus.key1][subQ.key]"
                 rows="3"
                 :label="subQ.text"
                 box
                 readonly
+                hide-details
                 auto-grow
+                :class="index !== 0 ? 'mt-3' : ''"
               />
             </transition-group>
             <transition v-else name="fade" mode="out-in">

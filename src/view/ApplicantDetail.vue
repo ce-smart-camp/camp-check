@@ -7,7 +7,7 @@
             <h3 class="headline mb-0">ข้อมูลส่วนตัว</h3>
             <v-spacer />
             <h2>
-              คะแนน : {{ check.sum ? check.sum.info || 0 : 0 }} || รวม :
+              คะแนน : {{ check.sum ? check.sum.info || 0 : 0 }} || รวมกับคำถาม :
               {{ check.sum ? check.sum.all || 0 : 0 }}
             </h2>
           </v-card-title>

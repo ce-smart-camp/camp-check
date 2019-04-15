@@ -46,7 +46,7 @@
       <v-flex v-for="qus in questions" :key="qus.item" xs12>
         <v-card :dark="check.mark[qus.item]">
           <v-card-text>
-            <div class="my-3">
+            <div class="mb-3">
               <p v-if="typeof qus.text === 'string'">{{ qus.text }}</p>
               <p v-else>
                 <template v-for="(sub, index) in qus.text"

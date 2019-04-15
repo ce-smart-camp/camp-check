@@ -19,7 +19,7 @@
           <v-card-title primary-title>
             <h3>คำค้นหา</h3>
           </v-card-title>
-          <v-card-text>
+          <v-card-text class="pt-0">
             <div>
               <p>
                 <kbd>M</kbd> => การมาร์คทุกอย่าง<br />
@@ -29,7 +29,7 @@
                 <kbd>Mq1-4</kbd> => คำถามชุด 1 ข้อ 4 , <kbd>Mq2-11</kbd> =>
                 คำถามชุด 2 ข้อ 11
               </p>
-              <p>
+              <p class="mb-0">
                 การค้นหาจะคล้ายกับการมาร์ค แต่จะใช้ <kbd>C</kbd> แทน<br />
                 <kbd>C</kbd> => ที่ใส่ comment ทั้งหมด<br />
                 จะใช้ <kbd>|</kbd> ในการคั่นระหว่างจุดที่ค้นหากับคำค้นหา<br />
@@ -77,10 +77,10 @@
               <td class="text-xs-right">{{ props.item.score.q1 }}</td>
               <td class="text-xs-right">{{ props.item.score.q2 }}</td>
               <td class="text-xs-right">{{ props.item.score.sum }}</td>
-              <td class="text-xs-left">
+              <td class="text-xs-left text-no-wrap">
                 {{ new Date(props.item.completed_at).toLocaleString() }}
               </td>
-              <td class="text-xs-right">
+              <td class="text-xs-right text-no-wrap">
                 {{ props.item.mark.q1 }} /
                 {{ props.item.do.q1 }}
                 <v-btn
@@ -92,7 +92,7 @@
                   <v-icon small class="mr-2 pl-2">insert_comment</v-icon>
                 </v-btn>
               </td>
-              <td class="text-xs-right">
+              <td class="text-xs-right text-no-wrap">
                 {{ props.item.mark.q2 }} /
                 {{ props.item.do.q2 }}
                 <v-btn

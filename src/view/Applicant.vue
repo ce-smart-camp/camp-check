@@ -37,7 +37,7 @@
           >
             <template v-slot:items="props">
               <td
-                class="text-xs-left"
+                class="text-xs-left text-truncate"
                 :style="
                   props.item.mark.info == 1 ? 'background-color: silver;' : ''
                 "
@@ -45,11 +45,15 @@
                 {{ props.item.id }}
               </td>
               <td class="text-xs-left">{{ props.item.score.info }}</td>
-              <td class="text-xs-left">{{ props.item.info.name }}</td>
-              <td class="text-xs-left">{{ props.item.info.surname }}</td>
+              <td class="text-xs-left text-no-wrap">
+                {{ props.item.info.name }}
+              </td>
+              <td class="text-xs-left text-no-wrap">
+                {{ props.item.info.surname }}
+              </td>
               <td class="text-xs-left">{{ props.item.info.nickname }}</td>
               <td class="text-xs-left">{{ props.item.info.gender }}</td>
-              <td class="text-xs-left">
+              <td class="text-xs-left text-no-wrap">
                 {{ new Date(props.item.created_at).toLocaleString() }}
               </td>
               <td class="justify-center layout px-0">
