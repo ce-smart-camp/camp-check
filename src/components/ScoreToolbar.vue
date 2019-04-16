@@ -24,7 +24,11 @@
     <v-divider class="mx-3" vertical />
     <v-menu :close-on-content-click="false" offset-y>
       <template v-slot:activator="{ on }">
-        <v-btn flat v-on="on">
+        <v-btn
+          flat
+          style="min-width: 0px;width: 36px;margin-left: 0px;margin-right: 0px;"
+          v-on="on"
+        >
           <v-icon>format_color_fill</v-icon>
         </v-btn>
       </template>
