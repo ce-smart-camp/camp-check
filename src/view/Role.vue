@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-xl>
+  <v-container v-if="show" grid-list-xl>
     <v-layout wrap>
       <v-flex xs12>
         <v-card>
@@ -13,7 +13,7 @@
 
       <v-flex xs12>
         <v-card>
-          <!-- <v-data-table :headers="headers" :items="friends">
+          <v-data-table :headers="headers" :items="friends">
             <template v-slot:items="props">
               <td>{{ props.item.id }}</td>
               <td>{{ props.item.name }}</td>
@@ -25,7 +25,7 @@
               <td>{{ props.item.q2 }}</td>
               <td>{{ props.item.check }}</td>
             </template>
-          </v-data-table> -->
+          </v-data-table>
         </v-card>
       </v-flex>
 
@@ -73,6 +73,9 @@ export default {
     };
   },
   computed: {
+    show() {
+      return this.$store.state.role.more;
+    },
     friends() {
       return this.$store.state.list.role;
     }

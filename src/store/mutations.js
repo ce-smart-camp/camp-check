@@ -56,3 +56,7 @@ export const removeWait = (state, data) => {
   var index = state.wait.indexOf(data);
   if (index !== -1) state.wait.splice(index, 1);
 };
+
+export const changeRole = (state, data) => {
+  state.role = data;
+};

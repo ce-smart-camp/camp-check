@@ -16,7 +16,8 @@ const state = {
     reg: null,
     qus: null,
     check: null,
-    role: null
+    role: null,
+    ownRole: null
   },
   key: {
     reg: {},
@@ -32,7 +33,17 @@ const state = {
   },
   wait: [],
   pagination: {},
-  search: null
+  search: null,
+  role: {
+    name: null,
+    surname: null,
+    nickname: null,
+    email: null,
+    q1: false,
+    q2: false,
+    check: false,
+    more: false
+  }
 };
 
 const store = new Vuex.Store({

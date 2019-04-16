@@ -1,5 +1,6 @@
 import "./../core/auth";
 
+import crypto from "crypto";
 import db from "./../core/db";
 import firebase from "./../core/firebase";
 
@@ -12,6 +13,20 @@ export const init = ({ dispatch, state, commit }, collection) => {
           dispatch("init", coll);
           commit("removeWait", coll);
         });
+
+        // Get role data
+        let docID = crypto
+          .createHash("md5")
+          .update(user.email)
+          .digest("hex");
+
+        let unsubRole = db
+          .collection("role")
+          .doc(docID)
+          .onSnapshot(function(doc) {
+            commit("changeRole", doc.data());
+          });
+        commit("setUnsubscribe", { key: "ownRole", val: unsubRole });
       } else {
         Object.keys(state.unsubscribe).forEach(key => {
           if (key === "login") return;

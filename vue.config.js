@@ -2,8 +2,8 @@ module.exports = {
   css: {
     sourceMap: true
   },
-  
-  configureWebpack:{
+
+  configureWebpack: {
     optimization: {
       splitChunks: {
         minSize: 10000,

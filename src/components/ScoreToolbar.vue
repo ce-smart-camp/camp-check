@@ -8,6 +8,7 @@
       placeholder="คะแนน"
       style="max-width: 70px;"
       class="pt-0"
+      :disabled="!enable"
       @input="debounceScore"
     ></v-text-field>
     <v-divider class="mx-3" vertical />
@@ -17,11 +18,12 @@
       hide-details
       placeholder="Comment"
       class="pt-0"
+      :disabled="!enable"
       @input="debounceComment"
     ></v-text-field>
     <v-divider class="mx-3" vertical />
     <v-btn-toggle v-model="mark" class="transparent">
-      <v-btn :value="true" flat>
+      <v-btn :value="true" flat :disabled="!enable">
         <v-icon>star</v-icon>
       </v-btn>
     </v-btn-toggle>
@@ -45,6 +47,16 @@ export default {
     }
   },
   computed: {
+    enable() {
+      let role = this.field.split("-")[0];
+      if (role !== "info")
+        return this.$store.state.role[role] && this.$store.state.role.check;
+      else
+        return (
+          (this.$store.state.role.q1 || this.$store.state.role.q2) &&
+          this.$store.state.role.check
+        );
+    },
     check() {
       return this.$store.getters.getByID("check", this.id);
     },

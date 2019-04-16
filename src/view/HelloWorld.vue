@@ -23,8 +23,8 @@
       <v-flex>
         <v-btn color="success" to="a">Applicant</v-btn>
         <v-btn color="success" to="q">Question</v-btn>
-        <v-btn color="success" to="s">Sum</v-btn>
-        <v-btn color="success" to="r">Role</v-btn>
+        <v-btn v-if="roleMore" color="success" to="s">Sum</v-btn>
+        <v-btn v-if="roleMore" color="success" to="r">Role</v-btn>
       </v-flex>
     </v-layout>
   </v-container>
@@ -35,6 +35,9 @@ import { signIn, signOut } from "./../core/auth";
 import firebase from "./../core/firebase";
 export default {
   computed: {
+    roleMore() {
+      return this.$store.state.role.more;
+    },
     isLogin() {
       return this.$store.state.is.login;
     },

@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-xl>
+  <v-container v-if="show" grid-list-xl>
     <v-layout wrap>
       <v-flex xs12>
         <v-card>
@@ -123,6 +123,9 @@ export default {
     };
   },
   computed: {
+    show() {
+      return this.$store.state.role.more;
+    },
     question() {
       return this.$store.state.list.reg;
     },
