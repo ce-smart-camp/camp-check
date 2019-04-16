@@ -2,7 +2,7 @@
   <v-container grid-list-xl>
     <v-layout v-if="form" wrap>
       <v-flex xs12>
-        <v-card :dark="check.mark['info']">
+        <v-card :dark="isDark('info')" :color="getColor('info')">
           <v-card-title primary-title>
             <h3 class="headline mb-0">ตรวจคำตอบ คำถาม</h3>
             <h1>Part 2</h1>
@@ -44,7 +44,7 @@
       </v-flex>
 
       <v-flex v-for="qus in questions" :key="qus.item" xs12>
-        <v-card :dark="check.mark[qus.item]">
+        <v-card :dark="isDark(qus.item)" :color="getColor(qus.item)">
           <v-card-text>
             <div class="mb-3">
               <p v-if="typeof qus.text === 'string'">{{ qus.text }}</p>
@@ -106,7 +106,7 @@
       </v-flex>
 
       <v-flex>
-        <v-card>
+        <v-card :dark="isDark('info')" :color="getColor('info')">
           <v-card-text class="text-xs-center">
             <v-pagination
               v-model="page"
@@ -121,6 +121,8 @@
 </template>
 
 <script>
+import colorConvert from "color-convert";
+
 import ScoreToolbar from "./../components/ScoreToolbar";
 import ImgUp from "./../components/imageUpload";
 
@@ -276,6 +278,20 @@ export default {
   created() {
     this.$store.dispatch("init", "qus");
     this.$store.dispatch("init", "check");
+  },
+  methods: {
+    getColor(feild) {
+      return typeof this.check.mark[feild] === "string" &&
+        this.check.mark[feild] !== null
+        ? this.check.mark[feild]
+        : this.check.mark[feild] === true
+        ? "#424242"
+        : "#FFFFFF";
+    },
+    isDark(feild) {
+      let rawHex = this.getColor(feild).substr(1);
+      return colorConvert.hex.lab(rawHex)[0] < 56;
+    }
   }
 };
 </script>

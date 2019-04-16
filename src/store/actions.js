@@ -119,7 +119,8 @@ let prepareRegData = (doc, Key, state, commit) => {
     data.mark = data.mark || {};
     var sumMark = { q1: 0, q2: 0, info: 0 };
     Object.keys(data.mark).forEach(key => {
-      sumMark[key.split("-")[0]] += data.mark[key] ? 1 : 0;
+      sumMark[key.split("-")[0]] +=
+        data.mark[key] && data.mark[key] !== "#FFFFFF" ? 1 : 0;
     });
     data.mark.sum = sumMark;
 

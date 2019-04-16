@@ -22,20 +22,29 @@
       @input="debounceComment"
     ></v-text-field>
     <v-divider class="mx-3" vertical />
-    <v-btn-toggle v-model="mark" class="transparent">
-      <v-btn :value="true" flat :disabled="!enable">
-        <v-icon>star</v-icon>
-      </v-btn>
-    </v-btn-toggle>
+    <v-menu :close-on-content-click="false" offset-y>
+      <template v-slot:activator="{ on }">
+        <v-btn flat v-on="on">
+          <v-icon>format_color_fill</v-icon>
+        </v-btn>
+      </template>
+
+      <compact-picker v-model="mark" />
+    </v-menu>
   </v-toolbar>
 </template>
 
 <script>
 import debounce from "debounce";
 
+import { Compact } from "vue-color";
+
 import db from "./../core/db";
 
 export default {
+  components: {
+    "compact-picker": Compact
+  },
   props: {
     id: {
       type: String,
@@ -68,10 +77,14 @@ export default {
     },
     mark: {
       get() {
-        return this.check.mark[this.field];
+        var raw = this.check.mark[this.field];
+        if (raw === true) return "#000000";
+        if (raw === null || raw === false || raw === undefined)
+          return "#FFFFFF";
+        return raw;
       },
       set(value) {
-        this.updateData("mark", value);
+        this.updateData("mark", value.hex);
       }
     }
   },
@@ -98,3 +111,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.vc-compact {
+  width: 245px;
+}
+</style>

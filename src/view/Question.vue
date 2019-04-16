@@ -183,6 +183,7 @@ export default {
                 data[key] !== null &&
                 data[key] !== false &&
                 data[key] !== "" &&
+                data[key] !== "#FFFFFF" &&
                 (typeof sub[1] !== "undefined"
                   ? data[key]
                       .toString()
