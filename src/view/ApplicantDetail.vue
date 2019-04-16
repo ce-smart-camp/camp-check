@@ -2,7 +2,7 @@
   <v-container grid-list-xl>
     <v-layout v-if="reg" wrap>
       <v-flex xs12>
-        <v-card :dark="check.mark['info']">
+        <v-card :dark="isDark('info')" :color="getColor('info')">
           <v-card-title primary-title>
             <h3 class="headline mb-0">ข้อมูลส่วนตัว</h3>
             <v-spacer />
@@ -97,6 +97,8 @@ import CamperEdu from "./../components/camper_edu";
 import CamperParent from "./../components/camper_parent";
 import CamperPass from "./../components/camper_pass";
 
+import colorConvert from "color-convert";
+
 import ScoreToolbar from "./../components/ScoreToolbar";
 
 export default {
@@ -136,6 +138,20 @@ export default {
   created() {
     this.$store.dispatch("init", "reg");
     this.$store.dispatch("init", "check");
+  },
+  methods: {
+    getColor(feild) {
+      return typeof this.check.mark[feild] === "string" &&
+        this.check.mark[feild] !== null
+        ? this.check.mark[feild]
+        : this.check.mark[feild] === true
+        ? "#424242"
+        : "#FFFFFF";
+    },
+    isDark(feild) {
+      let rawHex = this.getColor(feild).substr(1);
+      return colorConvert.hex.lab(rawHex)[0] < 56;
+    }
   }
 };
 </script>
