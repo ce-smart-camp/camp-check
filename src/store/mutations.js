@@ -19,8 +19,8 @@ export const setIs = (state, data) => {
   state.is[data.key] = data.val;
 };
 
-export const setSnapshot = (state, data) => {
-  state.snapshot[data.key] = data.val;
+export const setUnsubscribe = (state, data) => {
+  state.unsubscribe[data.key] = data.val;
 };
 
 export const setPagination = (state, data) => {
@@ -46,4 +46,13 @@ export const setScore = (state, data) => {
   if (state.key.reg.hasOwnProperty(data.id)) {
     Object.assign(state.list.reg[state.key.reg[data.id]], { score, mark });
   }
+};
+
+export const addWait = (state, data) => {
+  if (state.wait.indexOf(data) === -1) state.wait.push(data);
+};
+
+export const removeWait = (state, data) => {
+  var index = state.wait.indexOf(data);
+  if (index !== -1) state.wait.splice(index, 1);
 };

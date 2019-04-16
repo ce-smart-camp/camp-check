@@ -11,21 +11,26 @@ const state = {
   is: {
     login: null
   },
-  snapshot: {
+  unsubscribe: {
+    login: null,
     reg: null,
     qus: null,
-    check: null
+    check: null,
+    role: null
   },
   key: {
     reg: {},
     qus: {},
-    check: {}
+    check: {},
+    role: {}
   },
   list: {
     reg: [],
     qus: [],
-    check: []
+    check: [],
+    role: []
   },
+  wait: [],
   pagination: {},
   search: null
 };

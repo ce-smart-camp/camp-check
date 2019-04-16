@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-layout text-xs-center wrap>
+    <v-layout text-xs-center wrap column>
       <v-flex xs12>
         <v-img
           :src="require('../assets/logo.svg')"
@@ -12,14 +12,19 @@
 
       <v-flex>
         <v-btn color="info" @click="loginBtn">
-          {{ loginBtnText }}
+          {{ isLogin ? "ออกจากระบบ" : "ลงชื่อเข้าใช้" }}
         </v-btn>
-        <p>
-          {{ loginText }}
+        <p v-if="isLogin">
+          ลงชื่อเข้าใช้ด้วยชื่อ :
+          {{ name }} E-mail : {{ email }}
         </p>
+      </v-flex>
+
+      <v-flex>
         <v-btn color="success" to="a">Applicant</v-btn>
         <v-btn color="success" to="q">Question</v-btn>
         <v-btn color="success" to="s">Sum</v-btn>
+        <v-btn color="success" to="r">Role</v-btn>
       </v-flex>
     </v-layout>
   </v-container>
@@ -29,26 +34,16 @@
 import { signIn, signOut } from "./../core/auth";
 import firebase from "./../core/firebase";
 export default {
-  data: () => ({
-    loginBtnText: "Login",
-    loginText: "",
-    isLogin: false
-  }),
-  mounted() {
-    firebase.auth().onAuthStateChanged(user => {
-      this.isLogin = !!user;
-      this.changeText();
-
-      this.$store.commit("setIs", { key: "login", val: this.isLogin });
-      if (!user) {
-        ["reg", "qus", "check"].forEach(key => {
-          if (this.$store.state.snapshot[key] !== null)
-            this.$store.state.snapshot[key]();
-          this.$store.commit("setSnapshot", { key: key, val: null });
-          this.$store.commit("resetData", key);
-        });
-      }
-    });
+  computed: {
+    isLogin() {
+      return this.$store.state.is.login;
+    },
+    name() {
+      return firebase.auth().currentUser.displayName;
+    },
+    email() {
+      return firebase.auth().currentUser.email;
+    }
   },
   methods: {
     loginBtn: function() {
@@ -56,17 +51,6 @@ export default {
         signOut();
       } else {
         signIn();
-      }
-    },
-    changeText: function() {
-      if (this.isLogin) {
-        this.loginBtnText = "ออกจากระบบ";
-        this.loginText =
-          "ลงชื่อเข้าใช้ด้วยชื่อ " +
-          firebase.auth().currentUser.providerData[0].displayName;
-      } else {
-        this.loginBtnText = "ลงชื่อเข้าใช้";
-        this.loginText = "";
       }
     }
   }

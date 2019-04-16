@@ -61,6 +61,11 @@ const router = new VueRouter({
       path: "/s",
       name: "s",
       component: () => import(/* webpackChunkName: "s" */ "./view/Sum")
+    },
+    {
+      path: "/r",
+      name: "r",
+      component: () => import(/* webpackChunkName: "r" */ "./view/Role")
     }
   ]
 });

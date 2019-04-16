@@ -134,8 +134,8 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch("init", "check");
     this.$store.dispatch("init", "reg");
+    this.$store.dispatch("init", "check");
   }
 };
 </script>

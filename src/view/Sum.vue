@@ -144,8 +144,8 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch("init", "check");
     this.$store.dispatch("init", "reg");
+    this.$store.dispatch("init", "check");
   },
   methods: {
     // credit: https://github.com/vuetifyjs/vuetify/blob/master/packages/vuetify/src/mixins/data-iterable.js

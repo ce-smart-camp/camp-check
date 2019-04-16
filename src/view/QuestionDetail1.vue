@@ -202,8 +202,8 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch("init", "check");
     this.$store.dispatch("init", "qus");
+    this.$store.dispatch("init", "check");
   }
 };
 </script>

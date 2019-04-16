@@ -3,10 +3,35 @@ import "./../core/auth";
 import db from "./../core/db";
 import firebase from "./../core/firebase";
 
-export const init = ({ dispatch, state }, collection) => {
-  if (state.is.login) {
-    if (state.snapshot[collection] === null) {
-      dispatch("setupDB", collection);
+export const init = ({ dispatch, state, commit }, collection) => {
+  if (state.unsubscribe.login === null) {
+    var unsubscribe = firebase.auth().onAuthStateChanged(user => {
+      commit("setIs", { key: "login", val: !!user });
+      if (user) {
+        state.wait.forEach(coll => {
+          dispatch("init", coll);
+          commit("removeWait", coll);
+        });
+      } else {
+        Object.keys(state.unsubscribe).forEach(key => {
+          if (key === "login") return;
+
+          if (state.unsubscribe[key] !== null) state.unsubscribe[key]();
+          commit("setUnsubscribe", { key: key, val: null });
+          commit("resetData", key);
+        });
+      }
+    });
+
+    commit("setUnsubscribe", { key: "login", val: unsubscribe });
+  }
+  if (collection) {
+    if (state.is.login) {
+      if (!state.unsubscribe[collection]) {
+        dispatch("setupDB", collection);
+      }
+    } else {
+      commit("addWait", collection);
     }
   }
 };
@@ -93,7 +118,7 @@ let prepareRegData = (doc, Key, state, commit) => {
 
 export const setupDB = ({ commit, state }, collection) => {
   let unsubscribe = db.collection(collection);
-  if (collection !== "check") {
+  if (collection === "reg" || collection === "qus") {
     unsubscribe = unsubscribe
       .where(
         "completed_at",
@@ -113,7 +138,7 @@ export const setupDB = ({ commit, state }, collection) => {
       }
     });
   });
-  commit("setSnapshot", { key: collection, val: unsubscribe });
+  commit("setUnsubscribe", { key: collection, val: unsubscribe });
 };
 
 export const checkStoreCheck = ({ commit, getters }, id) => {
