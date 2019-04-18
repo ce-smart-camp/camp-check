@@ -1,6 +1,10 @@
 <template>
-  <v-container grid-list-xl>
-    <v-layout v-if="form" wrap>
+  <v-container
+    v-if="form"
+    grid-list-xl
+    :style="{ 'background-color': getColor('info') }"
+  >
+    <v-layout wrap>
       <v-flex xs12>
         <v-card :dark="isDark('info')" :color="getColor('info')">
           <v-card-title primary-title>
