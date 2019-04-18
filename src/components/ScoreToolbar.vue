@@ -108,10 +108,10 @@ export default {
     },
     debounceScore: debounce(function(val) {
       this.updateData("score", val);
-    }, 500),
+    }, 100),
     debounceComment: debounce(function(val) {
       this.updateData("comment", val);
-    }, 1000)
+    }, 300)
   }
 };
 </script>
