@@ -1,23 +1,23 @@
 <template>
   <v-toolbar dense>
     <v-text-field
-      :value="score"
+      v-model.number="score"
       type="number"
       single-line
       hide-details
       placeholder="คะแนน"
       style="max-width: 70px;"
-      class="pt-0"
+      :class="{ 'pt-0': true, orange: !inputScore }"
       :disabled="!enable"
       @input="debounceScore"
     ></v-text-field>
     <v-divider class="mx-3" vertical />
     <v-text-field
-      :value="comment"
+      v-model="comment"
       single-line
       hide-details
       placeholder="Comment"
-      class="pt-0"
+      :class="{ 'pt-0': true, orange: !inputComment }"
       :disabled="!enable"
       @input="debounceComment"
     ></v-text-field>
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import debounce from "debounce";
+import debounce from "lodash.debounce";
 
 import { Compact } from "vue-color";
 
@@ -59,6 +59,14 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      inputScore: true,
+      inScore: null,
+      inputComment: true,
+      inComment: null
+    };
+  },
   computed: {
     enable() {
       let role = this.field.split("-")[0];
@@ -73,11 +81,23 @@ export default {
     check() {
       return this.$store.getters.getByID("check", this.id);
     },
-    score() {
-      return this.check[this.field];
+    score: {
+      get() {
+        return this.check[this.field];
+      },
+      set(val) {
+        this.inScore = val;
+        this.inputScore = false;
+      }
     },
-    comment() {
-      return this.check.comment[this.field];
+    comment: {
+      get() {
+        return this.check.comment[this.field];
+      },
+      set(val) {
+        this.inComment = val;
+        this.inputComment = false;
+      }
     },
     mark: {
       get() {
@@ -92,6 +112,24 @@ export default {
       }
     }
   },
+  watch: {
+    id() {
+      this.inScore = this.score;
+      this.inComment = this.comment;
+    },
+    score(val) {
+      this.inputScore = val == this.inScore;
+    },
+    comment(val) {
+      this.inputComment = val == this.inComment;
+    },
+    inputScore() {
+      this.$emit("canChange", this.inputScore && this.inputComment);
+    },
+    inputComment() {
+      this.$emit("canChange", this.inputScore && this.inputComment);
+    }
+  },
   methods: {
     updateData(type, value) {
       if (typeof value === "undefined") value = null;
@@ -100,7 +138,7 @@ export default {
         data[type] = {};
         data[type][this.field] = value;
       } else {
-        data[this.field] = Number(value);
+        data[this.field] = value;
       }
       db.collection("check")
         .doc(this.id)
@@ -108,10 +146,10 @@ export default {
     },
     debounceScore: debounce(function(val) {
       this.updateData("score", val);
-    }, 100),
+    }, 500),
     debounceComment: debounce(function(val) {
       this.updateData("comment", val);
-    }, 300)
+    }, 500)
   }
 };
 </script>

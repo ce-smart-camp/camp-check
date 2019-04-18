@@ -9,8 +9,8 @@
   },
   "dependencies": {
     "color-convert": "^2.0.0",
-    "debounce": "^1.2.0",
     "firebase": "^5.9.0",
+    "lodash.debounce": "^4.0.8",
     "vue": "^2.6.6",
     "vue-color": "^2.7.0",
     "vue-router": "^3.0.2",

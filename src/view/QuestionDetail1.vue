@@ -39,7 +39,11 @@
             ></v-pagination>
           </v-card-text>
 
-          <ScoreToolbar :id="id" field="info" />
+          <ScoreToolbar
+            :id="id"
+            field="info"
+            @canChange="val => (canChangePage['info'] = val)"
+          />
         </v-card>
       </v-flex>
 
@@ -69,7 +73,11 @@
             </transition>
           </v-card-text>
 
-          <ScoreToolbar :id="id" :field="qus.item" />
+          <ScoreToolbar
+            :id="id"
+            :field="qus.item"
+            @canChange="val => (canChangePage[qus.item] = val)"
+          />
         </v-card>
       </v-flex>
 
@@ -180,7 +188,8 @@ export default {
           key2: "item3",
           item: "q1-11"
         }
-      ]
+      ],
+      canChangePage: {}
     };
   },
   computed: {
@@ -199,11 +208,14 @@ export default {
         return Number(this.$route.params.idNum) + 1;
       },
       set(value) {
-        this.$router.replace({
-          name: "qid1",
-          params: { idNum: value - 1 },
-          hash: this.$router.history.current.hash
-        }); // !!router name
+        if (
+          Object.keys(this.canChangePage).every(key => this.canChangePage[key])
+        )
+          this.$router.replace({
+            name: "qid1",
+            params: { idNum: value - 1 },
+            hash: this.$router.history.current.hash
+          }); // !!router name
       }
     }
   },
@@ -231,14 +243,15 @@ export default {
       return colorConvert.hex.lab(rawHex)[0] < 56;
     },
     nextPage(event) {
-      if (event.keyCode == 37 && this.page > 1) {
-        this.page--;
-      } else if (
-        event.keyCode == 39 &&
-        this.page < this.$store.state.list.qus.length
-      ) {
-        this.page++;
-      }
+      if (Object.keys(this.canChangePage).every(key => this.canChangePage[key]))
+        if (event.keyCode == 37 && this.page > 1) {
+          this.page--;
+        } else if (
+          event.keyCode == 39 &&
+          this.page < this.$store.state.list.qus.length
+        ) {
+          this.page++;
+        }
     }
   }
 };

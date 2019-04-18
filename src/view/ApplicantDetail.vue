@@ -24,7 +24,11 @@
             ></v-pagination>
           </v-card-text>
 
-          <ScoreToolbar :id="id" field="info" />
+          <ScoreToolbar
+            :id="id"
+            field="info"
+            @canChange="val => (canChangePage['info'] = val)"
+          />
         </v-card>
       </v-flex>
 
@@ -112,6 +116,11 @@ export default {
     CamperPass,
     ScoreToolbar
   },
+  data() {
+    return {
+      canChangePage: {}
+    };
+  },
   computed: {
     id() {
       return this.$route.params.id;
@@ -128,10 +137,13 @@ export default {
         return Number(this.$store.state.key.reg[this.id]) + 1;
       },
       set(value) {
-        this.$router.replace({
-          name: "aid",
-          params: { id: this.$store.state.list.reg[value - 1].id }
-        }); // !!router name
+        if (
+          Object.keys(this.canChangePage).every(key => this.canChangePage[key])
+        )
+          this.$router.replace({
+            name: "aid",
+            params: { id: this.$store.state.list.reg[value - 1].id }
+          }); // !!router name
       }
     }
   },
@@ -159,14 +171,15 @@ export default {
       return colorConvert.hex.lab(rawHex)[0] < 56;
     },
     nextPage(event) {
-      if (event.keyCode == 37 && this.page > 1) {
-        this.page--;
-      } else if (
-        event.keyCode == 39 &&
-        this.page < this.$store.state.list.reg.length
-      ) {
-        this.page++;
-      }
+      if (Object.keys(this.canChangePage).every(key => this.canChangePage[key]))
+        if (event.keyCode == 37 && this.page > 1) {
+          this.page--;
+        } else if (
+          event.keyCode == 39 &&
+          this.page < this.$store.state.list.reg.length
+        ) {
+          this.page++;
+        }
     }
   }
 };
