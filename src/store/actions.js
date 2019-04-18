@@ -126,6 +126,15 @@ let prepareRegData = (doc, Key, state, commit) => {
 
     data.comment = data.comment || {};
 
+    var dataNull = {};
+    for (var i = 1; i <= 11; i++) {
+      dataNull["q1-" + i] = "";
+      dataNull["q2-" + i] = "";
+      dataNull["info"] = "";
+    }
+
+    data = { ...dataNull, ...data };
+
     // มีข้อมูลอยู่ แล้วเพิ่ม คะแนน
     commit("setScore", data);
   }

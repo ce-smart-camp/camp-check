@@ -78,7 +78,6 @@
 
 <script>
 import db from "./../core/db";
-import firebase from "./../core/firebase";
 import Store from "./../store";
 
 export default {
@@ -131,16 +130,20 @@ export default {
     recheck() {
       var batch = db.batch();
 
+      var data = {};
+      for (var i = 1; i <= 11; i++) {
+        data["q1-" + i] = "";
+        data["q2-" + i] = "";
+        data["info"] = "";
+      }
+
       Object.keys(this.$store.state.key.qus).forEach(docID => {
-        if (!this.$store.state.key.reg.hasOwnProperty(docID)) {
-          var regRef = db.collection("reg").doc(docID);
-          batch.update(regRef, {
-            completed_at: firebase.firestore.Timestamp.fromMillis(
-              this.$store.state.list.qus[this.$store.state.key.qus[docID]]
-                .completed_at
-            )
-          });
-        }
+        // if (!this.$store.state.key.check.hasOwnProperty(docID)) {
+        var a = this.$store.getters.getByID("check", docID);
+        var data1 = { ...data, ...a };
+        var checkRef = db.collection("check").doc(docID);
+        batch.update(checkRef, data1);
+        // }
       });
 
       batch.commit().catch(err => {
