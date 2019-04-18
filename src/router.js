@@ -10,16 +10,16 @@ const router = new VueRouter({
 
     if (to.hash) {
       scrollTo = to.hash;
-    } else if (to.name === from.name) {
-      scrollTo = 0;
     } else if (savedPosition) {
       scrollTo = savedPosition.y;
     }
 
     return new Promise(resolve => {
-      goTo(scrollTo).then(() => {
-        resolve({ x: 0, y: scrollTo });
-      });
+      setTimeout(() => {
+        goTo(scrollTo).then(out => {
+          resolve({ x: 0, y: out });
+        });
+      }, 50);
     });
   },
   routes: [

@@ -43,7 +43,7 @@
         </v-card>
       </v-flex>
 
-      <v-flex v-for="qus in questions" :key="qus.item" xs12>
+      <v-flex v-for="qus in questions" :id="qus.item" :key="qus.item" xs12>
         <v-card :dark="isDark(qus.item)" :color="getColor(qus.item)">
           <v-card-text>
             <div class="mb-3">
@@ -271,7 +271,11 @@ export default {
         return Number(this.$route.params.idNum) + 1;
       },
       set(value) {
-        this.$router.replace({ name: "qid2", params: { idNum: value - 1 } }); // !!router name
+        this.$router.replace({
+          name: "qid2",
+          params: { idNum: value - 1 },
+          hash: this.$router.history.current.hash
+        }); // !!router name
       }
     }
   },
