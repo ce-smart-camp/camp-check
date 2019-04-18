@@ -138,12 +138,12 @@ export default {
       }
 
       Object.keys(this.$store.state.key.qus).forEach(docID => {
-        // if (!this.$store.state.key.check.hasOwnProperty(docID)) {
-        var a = this.$store.getters.getByID("check", docID);
-        var data1 = { ...data, ...a };
-        var checkRef = db.collection("check").doc(docID);
-        batch.update(checkRef, data1);
-        // }
+        if (!this.$store.state.key.check.hasOwnProperty(docID)) {
+          var a = this.$store.getters.getByID("check", docID);
+          var data1 = { ...data, ...a };
+          var checkRef = db.collection("check").doc(docID);
+          batch.update(checkRef, data1);
+        }
       });
 
       batch.commit().catch(err => {

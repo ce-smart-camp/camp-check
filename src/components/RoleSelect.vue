@@ -75,6 +75,9 @@ export default {
         newValue = newValue || [];
         let oldValue = this.list || [];
         let sum = newValue.concat(oldValue);
+
+        var batch = db.batch();
+
         sum.forEach(id => {
           let dbDoc = db.collection("role").doc(id);
           let data = {};
@@ -85,7 +88,13 @@ export default {
           } else {
             data[this.field] = false;
           }
-          dbDoc.set(data, { merge: true });
+          batch.update(dbDoc, data);
+        });
+
+        batch.commit().catch(err => {
+          if (err.code === "permission-denied")
+            alert("บอกผ่ายเว็บด้วย ถ้าหน้าต่างนี้แสดง");
+          else throw err;
         });
       }
     }
