@@ -65,44 +65,34 @@
               ></v-img>
             </div>
 
-            <transition v-if="qus.imgUp" name="fade" mode="out-in">
-              <ImgUp
-                :key="form[qus.key1][qus.key2]"
-                v-model="form[qus.key1][qus.key2]"
-                :filename="qus.imgUp"
-              />
-            </transition>
-            <transition-group
+            <ImgUp
+              v-if="qus.imgUp"
+              v-model="form[qus.key1][qus.key2]"
+              :filename="qus.imgUp"
+            />
+            <v-textarea
+              v-for="(subQ, index) in qus.key2a"
               v-else-if="qus.key2a"
-              name="fade"
-              mode="out-in"
-              tag="div"
-            >
-              <v-textarea
-                v-for="(subQ, index) in qus.key2a"
-                :key="`${qus.item}-${subQ.key}`"
-                v-model="form[qus.key1][subQ.key]"
-                rows="3"
-                :label="subQ.text"
-                box
-                readonly
-                hide-details
-                auto-grow
-                :class="index !== 0 ? 'mt-3' : ''"
-              />
-            </transition-group>
-            <transition v-else name="fade" mode="out-in">
-              <v-textarea
-                :key="form[qus.key1][qus.key2]"
-                v-model="form[qus.key1][qus.key2]"
-                rows="5"
-                box
-                single-line
-                hide-details
-                readonly
-                auto-grow
-              />
-            </transition>
+              :key="`${qus.item}-${subQ.key}`"
+              v-model="form[qus.key1][subQ.key]"
+              rows="3"
+              :label="subQ.text"
+              box
+              readonly
+              hide-details
+              auto-grow
+              :class="index !== 0 ? 'mt-3' : ''"
+            />
+            <v-textarea
+              v-else
+              v-model="form[qus.key1][qus.key2]"
+              rows="5"
+              box
+              single-line
+              hide-details
+              readonly
+              auto-grow
+            />
           </v-card-text>
 
           <ScoreToolbar

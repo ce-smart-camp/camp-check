@@ -58,19 +58,16 @@
                 /></template>
               </p>
             </div>
-            <transition name="fade" mode="out-in">
-              <v-textarea
-                :key="form[qus.key1][qus.key2]"
-                v-model="form[qus.key1][qus.key2]"
-                :name="qus.item"
-                rows="5"
-                single-line
-                hide-details
-                readonly
-                box
-                auto-grow
-              />
-            </transition>
+            <v-textarea
+              v-model="form[qus.key1][qus.key2]"
+              :name="qus.item"
+              rows="5"
+              single-line
+              hide-details
+              readonly
+              box
+              auto-grow
+            />
           </v-card-text>
 
           <ScoreToolbar
