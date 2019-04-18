@@ -279,6 +279,12 @@ export default {
     this.$store.dispatch("init", "qus");
     this.$store.dispatch("init", "check");
   },
+  mounted() {
+    document.addEventListener("keyup", this.nextPage);
+  },
+  beforeDestroy() {
+    document.removeEventListener("keyup", this.nextPage);
+  },
   methods: {
     getColor(feild) {
       return typeof this.check.mark[feild] === "string" &&
@@ -291,6 +297,16 @@ export default {
     isDark(feild) {
       let rawHex = this.getColor(feild).substr(1);
       return colorConvert.hex.lab(rawHex)[0] < 56;
+    },
+    nextPage(event) {
+      if (event.keyCode == 37 && this.page > 1) {
+        this.page--;
+      } else if (
+        event.keyCode == 39 &&
+        this.page < this.$store.state.list.qus.length
+      ) {
+        this.page++;
+      }
     }
   }
 };
