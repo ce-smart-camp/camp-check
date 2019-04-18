@@ -19,7 +19,7 @@ const router = new VueRouter({
         goTo(scrollTo).then(out => {
           resolve({ x: 0, y: out });
         });
-      }, 50);
+      }, 100);
     });
   },
   routes: [
