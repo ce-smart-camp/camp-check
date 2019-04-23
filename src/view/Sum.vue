@@ -38,6 +38,7 @@
             :search="search"
             :pagination.sync="pagination"
             :custom-sort="customSort"
+            :custom-filter="filter"
             class="elevation-1"
           >
             <template v-slot:items="props">
@@ -240,6 +241,43 @@ export default {
 
       XLSX.utils.book_append_sheet(wb, ws, "ข้อมูลส่วนตัวน้อง");
       XLSX.writeFile(wb, "ข้อมูลน้อง.xlsx");
+    },
+    filter(items, search) {
+      search = search.toString();
+      if (search.trim() === "") return items;
+
+      const Key = { C: "comment", M: "mark" };
+      const type = Key[search.charAt(0)];
+      if (typeof type !== "undefined") {
+        return items.filter(item => {
+          const index = this.$store.state.key.check[item.id];
+          if (typeof index !== "undefined") {
+            const sub = search
+              .substr(1)
+              .toLowerCase()
+              .split("|");
+            const data = this.$store.state.list.check[index][type];
+            return Object.keys(data).some(
+              key =>
+                key !== "sum" &&
+                key.indexOf(sub[0].trim()) !== -1 &&
+                data[key] !== null &&
+                data[key] !== false &&
+                data[key] !== "" &&
+                data[key] !== "#FFFFFF" &&
+                (typeof sub[1] !== "undefined"
+                  ? data[key]
+                      .toString()
+                      .toLowerCase()
+                      .indexOf(sub[1].trim()) !== -1
+                  : true)
+            );
+          }
+          return false;
+        });
+      }
+
+      return [];
     }
   },
   beforeRouteEnter(to, from, next) {
