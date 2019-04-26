@@ -45,7 +45,7 @@ export default {
       //
     };
   },
-  mounted: function() {
+  beforeCreate() {
     this.$store.dispatch("init");
   }
 };

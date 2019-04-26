@@ -1,33 +1,49 @@
+import * as actions from "./actions";
+import * as getters from "./getters";
+import * as mutations from "./mutations";
+
 import Vue from "vue";
 import Vuex from "vuex";
-import * as getters from "./getters";
-import * as actions from "./actions";
-import * as mutations from "./mutations";
 
 Vue.use(Vuex);
 
 const state = {
   is: {
-    initAuth: null,
-    login: null,
-    setupDB: null
+    login: null
   },
-  snapshot: {
+  unsubscribe: {
+    login: null,
     reg: null,
     qus: null,
-    check: null
+    check: null,
+    role: null,
+    ownRole: null
   },
   key: {
     reg: {},
     qus: {},
-    check: {}
+    check: {},
+    role: {}
   },
   list: {
     reg: [],
     qus: [],
-    check: []
+    check: [],
+    role: []
   },
-  pagination: {}
+  wait: [],
+  pagination: {},
+  search: null,
+  role: {
+    name: null,
+    surname: null,
+    nickname: null,
+    email: null,
+    q1: false,
+    q2: false,
+    check: false,
+    more: false
+  }
 };
 
 const store = new Vuex.Store({

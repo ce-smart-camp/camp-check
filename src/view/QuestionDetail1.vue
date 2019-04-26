@@ -1,17 +1,26 @@
 <template>
-  <v-container grid-list-xl>
-    <v-layout v-if="form" wrap>
+  <v-container
+    v-if="form"
+    grid-list-xl
+    :style="{ 'background-color': getColor('info') }"
+  >
+    <v-layout wrap>
       <v-flex xs12>
-        <v-card>
+        <v-card :dark="isDark('info')" :color="getColor('info')">
           <v-card-title primary-title>
-            <h3 class="headline mb-0">ตรวจคำตอบ คำถาม Part 1</h3>
+            <h3 class="headline mb-0">ตรวจคำตอบ คำถาม</h3>
+            <h1>Part 1</h1>
             <v-spacer />
             <h2>
               MARK :
               {{
                 check.mark ? (check.mark.sum ? check.mark.sum.q1 || 0 : 0) : 0
               }}
-              || คะแนน : {{ check.sum ? check.sum.q1 || 0 : 0 }} || รวม :
+              /
+              {{
+                check.mark ? (check.mark.sum ? check.mark.sum.sum || 0 : 0) : 0
+              }}
+              || คะแนน : {{ check.sum ? check.sum.q1 || 0 : 0 }} /
               {{ check.sum ? check.sum.sum || 0 : 0 }}
             </h2>
           </v-card-title>
@@ -33,47 +42,19 @@
               total-visible="10"
             ></v-pagination>
           </v-card-text>
+
+          <ScoreToolbar
+            :id="id"
+            field="info"
+            @canChange="val => (canChangePage['info'] = val)"
+          />
         </v-card>
       </v-flex>
 
-      <v-flex xs12>
-        <v-card :dark="check.mark['info']">
+      <v-flex v-for="qus in questions" :id="qus.item" :key="qus.item" xs12>
+        <v-card :dark="isDark(qus.item)" :color="getColor(qus.item)">
           <v-card-text>
-            <v-layout>
-              <v-flex xs4>
-                <v-text-field
-                  :value="check['info']"
-                  class="mt-0 pt-0"
-                  type="number"
-                  label="คะแนน"
-                  outline
-                  placeholder="0.00"
-                  @change="v => updateData('score', 'info', v)"
-                ></v-text-field>
-              </v-flex>
-              <v-flex xs4>
-                <v-checkbox
-                  :value="check.mark['info']"
-                  label="MARK THIS"
-                  @change="v => updateData('mark', 'info', v)"
-                ></v-checkbox>
-              </v-flex>
-              <v-flex xs4>
-                <v-text-field
-                  :value="check.comment['info']"
-                  label="Comment"
-                  @change="v => updateData('comment', 'info', v)"
-                ></v-text-field>
-              </v-flex>
-            </v-layout>
-          </v-card-text>
-        </v-card>
-      </v-flex>
-
-      <v-flex v-for="qus in questions" :key="qus.item" xs12>
-        <v-card :dark="check.mark[qus.item]">
-          <v-card-text>
-            <div class="my-3">
+            <div class="mb-3">
               <p v-if="typeof qus.text === 'string'">{{ qus.text }}</p>
               <p v-else>
                 <template v-for="(sub, index) in qus.text"
@@ -81,52 +62,28 @@
                 /></template>
               </p>
             </div>
-            <transition name="fade" mode="out-in">
-              <v-textarea
-                :key="form[qus.key1][qus.key2]"
-                v-model="form[qus.key1][qus.key2]"
-                :name="qus.item"
-                rows="5"
-                single-line
-                readonly
-                box
-                auto-grow
-              />
-            </transition>
-
-            <v-layout>
-              <v-flex xs4>
-                <v-text-field
-                  :value="check[qus.item]"
-                  class="mt-0 pt-0"
-                  type="number"
-                  label="คะแนน"
-                  outline
-                  placeholder="0.00"
-                  @change="v => updateData('score', qus.item, v)"
-                ></v-text-field>
-              </v-flex>
-              <v-flex xs4>
-                <v-checkbox
-                  :value="check.mark[qus.item]"
-                  label="MARK THIS"
-                  @change="v => updateData('mark', qus.item, v)"
-                ></v-checkbox>
-              </v-flex>
-              <v-flex xs4>
-                <v-text-field
-                  :value="check.comment[qus.item]"
-                  label="Comment"
-                  @change="v => updateData('comment', qus.item, v)"
-                ></v-text-field>
-              </v-flex>
-            </v-layout>
+            <v-textarea
+              v-model="form[qus.key1][qus.key2]"
+              :name="qus.item"
+              rows="5"
+              single-line
+              hide-details
+              readonly
+              box
+              auto-grow
+            />
           </v-card-text>
+
+          <ScoreToolbar
+            :id="id"
+            :field="qus.item"
+            @canChange="val => (canChangePage[qus.item] = val)"
+          />
         </v-card>
       </v-flex>
 
       <v-flex>
-        <v-card>
+        <v-card :dark="isDark('info')" :color="getColor('info')">
           <v-card-text class="text-xs-center">
             <v-pagination
               v-model="page"
@@ -141,12 +98,16 @@
 </template>
 
 <script>
-import db from "./../core/db";
+import colorConvert from "color-convert";
+
+import ScoreToolbar from "./../components/ScoreToolbar";
 
 export default {
+  components: {
+    ScoreToolbar
+  },
   data() {
     return {
-      check: { mark: {}, comment: {} },
       questions: [
         {
           text: `1. สมมติว่าน้องได้รับเครื่องมือที่ทำให้น้องเดินทางไปยังโลกอนาคตและย้อนกลับไปในอดีตได้
@@ -229,10 +190,17 @@ export default {
           item: "q1-11"
         }
       ],
-      storeUnsub: null
+      canChangePage: {}
     };
   },
   computed: {
+    id() {
+      return this.form.id;
+    },
+    check() {
+      this.$store.dispatch("checkStoreCheck", this.id);
+      return this.$store.getters.getByID("check", this.id);
+    },
     form() {
       return this.$store.state.list.qus[this.$route.params.idNum];
     },
@@ -241,56 +209,51 @@ export default {
         return Number(this.$route.params.idNum) + 1;
       },
       set(value) {
-        this.$router.replace({ name: "qid1", params: { idNum: value - 1 } }); // !!router name
+        if (
+          Object.keys(this.canChangePage).every(key => this.canChangePage[key])
+        )
+          this.$router.replace({
+            name: "qid1",
+            params: { idNum: value - 1 },
+            hash: this.$router.history.current.hash
+          }); // !!router name
       }
     }
+  },
+  created() {
+    this.$store.dispatch("init", "qus");
+    this.$store.dispatch("init", "check");
   },
   mounted() {
-    this.setupCheck();
+    document.addEventListener("keyup", this.nextPage);
+  },
+  beforeDestroy() {
+    document.removeEventListener("keyup", this.nextPage);
   },
   methods: {
-    updateData(Key, key, value) {
-      var data = {};
-      if (Key !== "score") {
-        data[Key] = {};
-        data[Key][key] = value;
-      } else {
-        data[key] = Number(value);
-      }
-      db.collection("check")
-        .doc(this.form.id)
-        .set(data, { merge: true });
+    getColor(feild) {
+      return typeof this.check.mark[feild] === "string" &&
+        this.check.mark[feild] !== null
+        ? this.check.mark[feild]
+        : this.check.mark[feild] === true
+        ? "#424242"
+        : "#FFFFFF";
     },
-    setupCheck() {
-      if (this.storeUnsub !== null) this.storeUnsub();
-
-      if (this.form) {
-        this.check = this.$store.getters.getByID("check", this.form.id) || {
-          comment: {},
-          mark: {},
-          sum: {}
-        };
-      }
-
-      this.storeUnsub = this.$store.subscribe(mutation => {
-        if (mutation.type === "editData" || mutation.type === "addData") {
-          if (
-            mutation.payload.key === "check" &&
-            mutation.payload.val.id === this.form.id
-          ) {
-            this.check = mutation.payload.val;
-          }
+    isDark(feild) {
+      let rawHex = this.getColor(feild).substr(1);
+      return colorConvert.hex.lab(rawHex)[0] < 56;
+    },
+    nextPage(event) {
+      if (Object.keys(this.canChangePage).every(key => this.canChangePage[key]))
+        if (event.keyCode == 37 && this.page > 1) {
+          this.page--;
+        } else if (
+          event.keyCode == 39 &&
+          this.page < this.$store.state.list.qus.length
+        ) {
+          this.page++;
         }
-      });
     }
-  },
-  beforeRouteUpdate(to, from, next) {
-    next();
-    this.setupCheck();
-  },
-  beforeRouteLeave(to, from, next) {
-    if (this.storeUnsub !== null) this.storeUnsub();
-    next();
   }
 };
 </script>

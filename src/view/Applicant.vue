@@ -37,7 +37,7 @@
           >
             <template v-slot:items="props">
               <td
-                class="text-xs-left"
+                class="text-xs-left text-truncate"
                 :style="
                   props.item.mark.info == 1 ? 'background-color: silver;' : ''
                 "
@@ -45,11 +45,15 @@
                 {{ props.item.id }}
               </td>
               <td class="text-xs-left">{{ props.item.score.info }}</td>
-              <td class="text-xs-left">{{ props.item.info.name }}</td>
-              <td class="text-xs-left">{{ props.item.info.surname }}</td>
+              <td class="text-xs-left text-no-wrap">
+                {{ props.item.info.name }}
+              </td>
+              <td class="text-xs-left text-no-wrap">
+                {{ props.item.info.surname }}
+              </td>
               <td class="text-xs-left">{{ props.item.info.nickname }}</td>
               <td class="text-xs-left">{{ props.item.info.gender }}</td>
-              <td class="text-xs-left">
+              <td class="text-xs-left text-no-wrap">
                 {{ new Date(props.item.created_at).toLocaleString() }}
               </td>
               <td class="justify-center layout px-0">
@@ -74,13 +78,11 @@
 
 <script>
 import db from "./../core/db";
-import firebase from "./../core/firebase";
 import Store from "./../store";
 
 export default {
   data() {
     return {
-      search: null,
       rowsPerPageItems: [
         50,
         100,
@@ -110,21 +112,37 @@ export default {
       set(value) {
         this.$store.commit("setPagination", value);
       }
+    },
+    search: {
+      get() {
+        return this.$store.state.search;
+      },
+      set(value) {
+        this.$store.commit("setSearch", value);
+      }
     }
+  },
+  created() {
+    this.$store.dispatch("init", "reg");
+    this.$store.dispatch("init", "check");
   },
   methods: {
     recheck() {
       var batch = db.batch();
 
+      var data = {};
+      for (var i = 1; i <= 11; i++) {
+        data["q1-" + i] = "";
+        data["q2-" + i] = "";
+        data["info"] = "";
+      }
+
       Object.keys(this.$store.state.key.qus).forEach(docID => {
-        if (!this.$store.state.key.reg.hasOwnProperty(docID)) {
-          var regRef = db.collection("reg").doc(docID);
-          batch.update(regRef, {
-            completed_at: firebase.firestore.Timestamp.fromMillis(
-              this.$store.state.list.qus[this.$store.state.key.qus[docID]]
-                .completed_at
-            )
-          });
+        if (!this.$store.state.key.check.hasOwnProperty(docID)) {
+          var a = this.$store.getters.getByID("check", docID);
+          var data1 = { ...data, ...a };
+          var checkRef = db.collection("check").doc(docID);
+          batch.update(checkRef, data1);
         }
       });
 
@@ -136,8 +154,10 @@ export default {
     }
   },
   beforeRouteEnter(to, from, next) {
-    if (from.path === "/")
+    if (from.path === "/") {
       Store.commit("setPagination", { sortBy: "created_at" });
+      Store.commit("setSearch", null);
+    }
     next();
   }
 };

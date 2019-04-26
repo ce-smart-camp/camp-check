@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-xl>
+  <v-container v-if="show" grid-list-xl>
     <v-layout wrap>
       <v-flex xs12>
         <v-card>
@@ -38,6 +38,7 @@
             :search="search"
             :pagination.sync="pagination"
             :custom-sort="customSort"
+            :custom-filter="filter"
             class="elevation-1"
           >
             <template v-slot:items="props">
@@ -102,7 +103,6 @@ import XLSX from "xlsx";
 export default {
   data() {
     return {
-      search: null,
       rowsPerPageItems: [
         50,
         100,
@@ -124,6 +124,9 @@ export default {
     };
   },
   computed: {
+    show() {
+      return this.$store.state.role.more;
+    },
     question() {
       return this.$store.state.list.reg;
     },
@@ -134,7 +137,19 @@ export default {
       set(value) {
         this.$store.commit("setPagination", value);
       }
+    },
+    search: {
+      get() {
+        return this.$store.state.search;
+      },
+      set(value) {
+        this.$store.commit("setSearch", value);
+      }
     }
+  },
+  created() {
+    this.$store.dispatch("init", "reg");
+    this.$store.dispatch("init", "check");
   },
   methods: {
     // credit: https://github.com/vuetifyjs/vuetify/blob/master/packages/vuetify/src/mixins/data-iterable.js
@@ -226,14 +241,53 @@ export default {
 
       XLSX.utils.book_append_sheet(wb, ws, "ข้อมูลส่วนตัวน้อง");
       XLSX.writeFile(wb, "ข้อมูลน้อง.xlsx");
+    },
+    filter(items, search) {
+      search = search.toString();
+      if (search.trim() === "") return items;
+
+      const Key = { C: "comment", M: "mark" };
+      const type = Key[search.charAt(0)];
+      if (typeof type !== "undefined") {
+        return items.filter(item => {
+          const index = this.$store.state.key.check[item.id];
+          if (typeof index !== "undefined") {
+            const sub = search
+              .substr(1)
+              .toLowerCase()
+              .split("|");
+            const data = this.$store.state.list.check[index][type];
+            return Object.keys(data).some(
+              key =>
+                key !== "sum" &&
+                key.indexOf(sub[0].trim()) !== -1 &&
+                data[key] !== null &&
+                data[key] !== false &&
+                data[key] !== "" &&
+                data[key] !== "#FFFFFF" &&
+                (typeof sub[1] !== "undefined"
+                  ? data[key]
+                      .toString()
+                      .toLowerCase()
+                      .indexOf(sub[1].trim()) !== -1
+                  : true)
+            );
+          }
+          return false;
+        });
+      }
+
+      return [];
     }
   },
   beforeRouteEnter(to, from, next) {
-    if (from.path === "/")
+    if (from.path === "/") {
       Store.commit("setPagination", {
         sortBy: "score.all",
         descending: true
       });
+      Store.commit("setSearch", null);
+    }
     next();
   }
 };
